@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{58ec2f8b-3bd1-43ee-a2b6-fee69fe808a8}</ProjectGuid>
-    <RootNamespace>OnlineGameStoreInterface</RootNamespace>
+    <ProjectGuid>{6ea1babf-8560-43b9-80c3-52534022dc20}</ProjectGuid>
+    <RootNamespace>TestApplication</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -104,10 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Gamestore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\GameStoreCore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Gamestore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\GameStoreCore;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,6 +130,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Administrator\Administrator.vcxproj">
+      <Project>{959a5eba-422c-4614-ad76-decc2574d424}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\GameStoreCore\GameStoreCore.vcxproj">
+      <Project>{3e930f42-fef2-4183-888f-78a455582c1e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Gamestore\Gamestore.vcxproj">
+      <Project>{3615943e-884f-40bb-a886-90cc67452162}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\User\User.vcxproj">
+      <Project>{2061c0f7-ca8d-4d54-870f-70aaf39cd688}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
