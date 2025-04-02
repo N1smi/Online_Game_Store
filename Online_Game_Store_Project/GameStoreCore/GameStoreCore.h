@@ -5,6 +5,10 @@
 #ifndef GAMESTORECORE_GAMESTORECORE_H_
 #define GAMESTORECORE_GAMESTORECORE_H_
 
+#include "../User/user.h"
+
+class Client;
+
 class Feedback {
 	Client* _client;
 	char* _text;
@@ -22,8 +26,7 @@ class Game {
 	Feedback** _feedbacks;
 };
 
-// inheritance User
-class Client {
+class Client:public User {
 	int _balance;
 	Game** _my_purchases;
 	Game** _desired;

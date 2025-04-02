@@ -136,7 +136,7 @@
       <Project>{959a5eba-422c-4614-ad76-decc2574d424}</Project>
     </ProjectReference>
     <ProjectReference Include="..\GameStoreCore\GameStoreCore.vcxproj">
-      <Project>{3e930f42-fef2-4183-888f-78a455582c1e}</Project>
+      <Project>{fa2538a6-d3bd-4958-bae2-21cfe2ee327d}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Gamestore\Gamestore.vcxproj">
       <Project>{3615943e-884f-40bb-a886-90cc67452162}</Project>

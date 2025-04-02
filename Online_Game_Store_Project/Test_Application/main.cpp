@@ -1,3 +1,5 @@
+// Copyright 2025 Smirnov Nikita
+
 #include <iostream>
 #include "../User/user.h"
 #include "../Administrator/administrator.h"

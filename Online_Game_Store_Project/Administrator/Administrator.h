@@ -5,8 +5,9 @@
 #ifndef ADMINISTRATOR_ADMINISTRATOR_H_
 #define ADMINISTRATOR_ADMINISTRATOR_H_
 
-// inheritance User
-class Administrator {
+#include "../User/user.h"
+
+class Administrator:public User {
 
 };
 
