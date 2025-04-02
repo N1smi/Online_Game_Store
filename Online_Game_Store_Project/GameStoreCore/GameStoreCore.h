@@ -6,7 +6,7 @@
 #define GAMESTORECORE_GAMESTORECORE_H_
 
 class Feedback {
-	//Client* _client;
+	Client* _client;
 	char* _text;
 	int _assessment;
 };
@@ -19,15 +19,15 @@ class Game {
 	char* _description;
 	int _price;
 	float _rating;
-	//Feedback** _feedbacks;
+	Feedback** _feedbacks;
 };
 
 // inheritance User
 class Client {
 	int _balance;
-	//Game** _my_purchases;
-	//Game** _desired;
-	//Game** _basket
+	Game** _my_purchases;
+	Game** _desired;
+	Game** _basket;
 };
 
 
