@@ -5,13 +5,13 @@
 
 #include "User.h"
 
-class Game;    
+class Game;  
 
 class Client :public User {
-	int _balance;    
-	Game** _my_purchases;    
-	Game** _desired;    
-	Game** _basket;    
+    int _balance;
+    Game** _my_purchases;
+    Game** _desired;
+    Game** _basket;
 };
 
 

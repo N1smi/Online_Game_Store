@@ -4,8 +4,8 @@
 #define ONLINE_GAME_STORE_PROJECT_USER_USER_H_
 
 class User {
-	char* _login;    
-	char* _password;    
+    char* _login;
+    char* _password;
 };
 
 #endif // ONLINE_GAME_STORE_PROJECT_USER_USER_H_
