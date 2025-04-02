@@ -1,14 +1,14 @@
 // Copyright 2025 Smirnov Nikita
 
-#ifndef FEEDBACK_FEEDBACK_H_
-#define FEEDBACK_FEEDBACK_H_
+#ifndef ONLINE_GAME_STORE_PROJECT_FEEDBACK_FEEDBACK_H_  
+#define ONLINE_GAME_STORE_PROJECT_FEEDBACK_FEEDBACK_H_  
 
-class Client;
+class Client;    
 
 class Feedback {
-	Client* _client;
-	char* _text;
-	int _assessment;
+	Client* _client;    
+	char* _text;    
+	int _assessment;    
 };
 
-#endif  // FEEDBACK_FEEDBACK_H_
+#endif  // ONLINE_GAME_STORE_PROJECT_FEEDBACK_FEEDBACK_H_  
