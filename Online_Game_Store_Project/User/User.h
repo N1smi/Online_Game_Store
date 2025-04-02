@@ -8,4 +8,4 @@ class User {
     char* _password;
 };
 
-#endif // ONLINE_GAME_STORE_PROJECT_USER_USER_H_
+#endif  // ONLINE_GAME_STORE_PROJECT_USER_USER_H_

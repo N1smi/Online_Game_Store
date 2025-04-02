@@ -1,11 +1,11 @@
 // Copyright 2025 Smirnov Nikita
 
-#ifndef ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_ 
-#define ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_ 
+#ifndef ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_
+#define ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_
 
 #include "User.h"
 
-class Game;  
+class Game;
 
 class Client :public User {
     int _balance;
@@ -15,4 +15,4 @@ class Client :public User {
 };
 
 
-#endif  // ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_ 
+#endif  // ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_
