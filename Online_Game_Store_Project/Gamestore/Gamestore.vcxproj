@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\GameStoreCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,11 +137,11 @@
     <ClInclude Include="Gamestore.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Administrator\Administrator.vcxproj">
-      <Project>{959a5eba-422c-4614-ad76-decc2574d424}</Project>
+    <ProjectReference Include="..\Client\Client.vcxproj">
+      <Project>{fa9a9f27-ad95-4f50-a315-7bf3c32f3574}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\GameStoreCore\GameStoreCore.vcxproj">
-      <Project>{fa2538a6-d3bd-4958-bae2-21cfe2ee327d}</Project>
+    <ProjectReference Include="..\Game\Game.vcxproj">
+      <Project>{a46c2579-56c6-4a02-81e1-0a2c9a60e474}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

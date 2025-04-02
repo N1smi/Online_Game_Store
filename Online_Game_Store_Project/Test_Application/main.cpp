@@ -1,10 +1,12 @@
 // Copyright 2025 Smirnov Nikita
 
 #include <iostream>
-#include "../User/user.h"
-#include "../Administrator/administrator.h"
-#include "../Gamestorecore/gamestorecore.h"
-#include "../Gamestore/gamestore.h"
+#include "User.h"
+#include "Administrator.h"
+#include "Client.h"
+#include "Game.h"
+#include "Feedback.h"
+#include "Gamestore.h"
 
 int main() {
 	User user_1;
@@ -13,6 +15,5 @@ int main() {
 	Game game_1;
 	Feedback feedback_1;
 	GameStore gamestore_1;
-
 	return 0;
 }

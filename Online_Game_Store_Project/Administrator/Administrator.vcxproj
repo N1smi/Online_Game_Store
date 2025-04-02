@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{959a5eba-422c-4614-ad76-decc2574d424}</ProjectGuid>
+    <ProjectGuid>{d019867b-4c29-4724-b6f1-f3a8ea42beef}</ProjectGuid>
     <RootNamespace>Administrator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,11 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Administrator.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\User\User.vcxproj">
-      <Project>{2061c0f7-ca8d-4d54-870f-70aaf39cd688}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

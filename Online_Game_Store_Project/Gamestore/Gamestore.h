@@ -1,12 +1,11 @@
-#pragma once
-
 // Copyright 2025 Smirnov Nikita
 
 #ifndef GAMESTORE_GAMESTORE_H_
 #define GAMESTORE_GAMESTORE_H_
 
-#include "../Administrator/administrator.h"
-#include "../Gamestorecore/gamestorecore.h"
+class Client;
+class Administrator;
+class Game;
 
 class GameStore {
 	Client* _clients;
