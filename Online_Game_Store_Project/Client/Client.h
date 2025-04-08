@@ -14,5 +14,4 @@ class Client :public User {
     Game** _basket;
 };
 
-
 #endif  // ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_

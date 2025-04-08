@@ -16,5 +16,4 @@ class Game {
     Feedback** _feedbacks;
 };
 
-
 #endif  // ONLINE_GAME_STORE_PROJECT_GAME_GAME_H_
