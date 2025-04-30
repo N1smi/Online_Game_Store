@@ -17,7 +17,7 @@ class TVector {
   size_t _deleted;
   State* _states;
 
-public:
+ public:
   explicit TVector(size_t size = 0);
   TVector(std::initializer_list<T>);
   TVector(const TVector<T>& other);
@@ -77,7 +77,7 @@ public:
   friend T* find_last(const TVector<T>& vec, const T& value);
   friend TVector<T*> find(const TVector<T>& vec, const T& value);
 
-private:
+ private:
   size_t real_pos(size_t pos);
   T* real_address(size_t pos);
   inline bool is_full() const noexcept;
@@ -294,8 +294,7 @@ void TVector<T>::insert(size_t pos, size_t count, const T& value) {
   for (size_t i = start_pos; i < insert_pos && count_deleted < count; i++) {
     if (_states[i] == deleted) {
       count_deleted++;
-    }
-    else {
+    } else {
       count_deleted = 0;
       break;
     }

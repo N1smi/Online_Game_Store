@@ -40,7 +40,7 @@ void start_test(bool(*test)(), const char* name_of_test) {
 
 template <class T>
 bool check(const T& expected, const T& actual) {
-   if (expected == actual) {
+  if (expected == actual) {
     return true;
   } else {
     std::cerr << "Expected result is " << expected
@@ -102,10 +102,11 @@ void print_stat(TVector<T> vec_1) {
 
 bool test_1_check_create_default_vector() {
   TVector<int> vec_1;
+  int* pointer = nullptr;
 
   bool result = (TestSystem::check(static_cast<size_t>(0), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(0), vec_1.capacity()))
-    && (TestSystem::check((int*)nullptr, vec_1.data()));
+    && (TestSystem::check(pointer, vec_1.data()));
 
   return result;
 }
@@ -128,7 +129,8 @@ bool test_3_check_create_vector_with_initialization_list() {
   // print_stat(vec_1);
   bool result = (TestSystem::check(static_cast<size_t>(3), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(3), vec_1.capacity()))
-    && (TestSystem::check(1.0f, vec_1[0])) && (TestSystem::check(0.0f, vec_1[1]))
+    && (TestSystem::check(1.0f, vec_1[0]))
+    && (TestSystem::check(0.0f, vec_1[1]))
     && (TestSystem::check(2.356f, vec_1[2]));
   return result;
 }
@@ -350,7 +352,7 @@ bool test_18_check_insert_in_empty_vector() {
 }
 
 bool test_19_check_pop_front() {
-  TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
+  TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
       16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 });
   // print_vect(vec_1);
   // print_stat(vec_1);
@@ -456,15 +458,14 @@ bool test_22_check_pop_front_whith_insert() {
   // print_vect(vec_1);
   // print_stat(vec_1);
   vec_1.insert(7, 222);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   bool result = (TestSystem::check(static_cast<size_t>(16), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(30), vec_1.capacity()))
     && (TestSystem::check(111, vec_1[0]))
     && (TestSystem::check(222, vec_1[7]));;
   return result; print_vect(vec_1);
-
 }
 
 bool test_23_throw_when_pop_front_in_empty_vector() {
@@ -691,7 +692,7 @@ bool test_30_check_pop_back_with_insert() {
 }
 
 bool test_31_check_erase() {
-  TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+  TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
    11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
   vec_1.push_front(111);
   // print_vect(vec_1);
@@ -719,7 +720,6 @@ bool test_31_check_erase() {
     && (TestSystem::check(3, vec_1[1]))
     && (TestSystem::check(18, vec_1.back()));
   return result;
-
 }
 
 bool test_32_throw_when_erase_in_empty_vector() {
@@ -750,7 +750,6 @@ bool test_33_throw_when_erase_for_a_non_existent_position() {
     actual_result = false;
   }
   return TestSystem::check(expected_result, actual_result);
-
 }
 
 bool test_34_check_several_push_insert_and_erase() {
@@ -805,63 +804,72 @@ bool test_34_check_several_push_insert_and_erase() {
 bool test_35_check_insert_whith_count_in_empty_vector() {
   TVector<int> vec_1;
   vec_1.insert(150, 50, 1);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  bool result = (TestSystem::check((size_t)50, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(1, vec_1[0])) && (TestSystem::check(1, vec_1[49]));
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  bool result = (TestSystem::check(static_cast<size_t>(50), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(1, vec_1[0]))
+    && (TestSystem::check(1, vec_1[49]));
   return result;
 }
 
 bool test_36_check_insert_whith_count_and_deleted() {
   TVector<int> vec_1;
   vec_1.insert(0, 50, 1);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   for (size_t i = 0; i < 3; i++) {
     vec_1.erase(1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.insert(1, 2, 3);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)49, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(3, vec_1[1])) && (TestSystem::check(3, vec_1[2]));
+  bool result = (TestSystem::check(static_cast<size_t>(49), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(3, vec_1[1]))
+    && (TestSystem::check(3, vec_1[2]));
   return result;
 }
 
 bool test_37_check_insert_whith_count_whithout_deleted() {
   TVector<int> vec_1;
   vec_1.insert(0, 50, 2);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.insert(25, 3, 5);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)53, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(5, vec_1[25])) && (TestSystem::check(5, vec_1[26])) && (TestSystem::check(5, vec_1[27]));
+  bool result = (TestSystem::check(static_cast<size_t>(53), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(5, vec_1[25]))
+    && (TestSystem::check(5, vec_1[26]))
+    && (TestSystem::check(5, vec_1[27]));
   return result;
 }
 
 bool test_38_check_insert_whith_zero_count() {
   TVector<int> vec_1(90);
   vec_1.insert(2, 0, 2);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)90, vec_1.size())) && (TestSystem::check((size_t)90, vec_1.capacity())) &&
-    (TestSystem::check(0, vec_1[2])) && (TestSystem::check(0, vec_1[2]));
+  bool result = (TestSystem::check(static_cast<size_t>(90), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(90), vec_1.capacity()))
+    && (TestSystem::check(0, vec_1[2]))
+    && (TestSystem::check(0, vec_1[2]));
   return result;
 }
 
@@ -901,7 +909,7 @@ bool test_41_throw_when_erase_with_incorrect_range() {
   bool actual_result = true;
   try {
     vec_1.erase(5, 91);
-    //vec_1.erase(5, 5);
+    // vec_1.erase(5, 5);
   }
   catch (const std::exception& ex) {
     std::cerr << ex.what();
@@ -916,16 +924,18 @@ bool test_42_check_erase_whith_range_without_deleted() {
   for (size_t i = 0; i < 50; i++) {
     vec_1.insert(i, i + 1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
   vec_1.erase(1, 6);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)45, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(7, vec_1[1])) && (TestSystem::check(8, vec_1[2]));
+  bool result = (TestSystem::check(static_cast<size_t>(45), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(7, vec_1[1]))
+    && (TestSystem::check(8, vec_1[2]));
   return result;
 }
 
@@ -934,23 +944,26 @@ bool test_43_check_erase_whith_range_and_deleted() {
   for (size_t i = 0; i < 50; i++) {
     vec_1.insert(i, i + 1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.pop_front();
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.erase(0, 6);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
 
-  bool result = (TestSystem::check((size_t)43, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(8, vec_1[0])) && (TestSystem::check(9, vec_1[1])) && (TestSystem::check(50, vec_1.back()));
+  bool result = (TestSystem::check(static_cast<size_t>(43), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(8, vec_1[0]))
+    && (TestSystem::check(9, vec_1[1]))
+    && (TestSystem::check(50, vec_1.back()));
   return result;
 }
 
@@ -959,18 +972,21 @@ bool test_44_check_erase_whith_pointers() {
   for (size_t i = 0; i < 50; i++) {
     vec_1.insert(i, i + 1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.erase(vec_1.begin() + 1, vec_1.begin() + 8);
 
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)43, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(1, vec_1[0])) && (TestSystem::check(9, vec_1[1])) && (TestSystem::check(50, vec_1.back()));
+  bool result = (TestSystem::check(static_cast<size_t>(43), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(1, vec_1[0]))
+    && (TestSystem::check(9, vec_1[1]))
+    && (TestSystem::check(50, vec_1.back()));
   return result;
 }
 
@@ -1035,25 +1051,27 @@ bool test_48_check_replace() {
   for (size_t i = 0; i < 30; i++) {
     vec_1.insert(i, i + 1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.replace(5, 999);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   vec_1.pop_front();
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.replace(10, 1000);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
-  bool result = (TestSystem::check((size_t)29, vec_1.size())) && (TestSystem::check((size_t)30, vec_1.capacity())) &&
-    (TestSystem::check(999, vec_1[4])) && (TestSystem::check(1000, vec_1[10]));
+  bool result = (TestSystem::check(static_cast<size_t>(29), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(30), vec_1.capacity()))
+    && (TestSystem::check(999, vec_1[4]))
+    && (TestSystem::check(1000, vec_1[10]));
   return result;
 }
 
@@ -1121,27 +1139,28 @@ bool test_52_check_replace_with_pointers() {
   for (size_t i = 0; i < 30; i++) {
     vec_1.insert(i, i + 1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.replace(vec_1.begin() + 5, 42);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   vec_1.pop_front();
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.replace(vec_1.begin() + 10, 142);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
-  bool result = (TestSystem::check((size_t)29, vec_1.size())) && (TestSystem::check((size_t)30, vec_1.capacity())) &&
-    (TestSystem::check(42, vec_1[4])) && (TestSystem::check(142, vec_1[10]));
+  bool result = (TestSystem::check(static_cast<size_t>(29), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(30), vec_1.capacity()))
+    && (TestSystem::check(42, vec_1[4]))
+    && (TestSystem::check(142, vec_1[10]));
   return result;
-
 }
 
 bool test_53_throw_when_replace_with_pointers_nullptr() {
@@ -1199,23 +1218,24 @@ bool test_55_throw_when_replace_with_pointers_out_of_range_right() {
 
 bool test_56_check_clear() {
   TVector<int> vec_1(100);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
   vec_1.push_back(101);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
   vec_1.erase(0, 10);
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
   vec_1.clear();
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)0, vec_1.size())) && (TestSystem::check((size_t)105, vec_1.capacity()))
+  bool result = (TestSystem::check(static_cast<size_t>(0), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(105), vec_1.capacity()))
     && (TestSystem::check(vec_1.is_empty(), true));
   return result;
 
@@ -1229,45 +1249,84 @@ int main() {
   Feedback feedback_1;
   GameStore gamestore_1;
 
-  TestSystem::start_test(test_1_check_create_default_vector, " TVector.test_1_check_create_default_vector");
-  TestSystem::start_test(test_2_check_create_vector_with_initialization, " TVector.test_2_check_create_vector_with_initialization");
-  TestSystem::start_test(test_3_check_create_vector_with_initialization_list, " TVector.test_3_check_create_vector_with_initialization_list");
-  TestSystem::start_test(test_4_check_check_create_vector_with_copy, " TVector.test_4_check_check_create_vector_with_copy");
-  TestSystem::start_test(test_5_throw_when_try_applying_for_position_abroad, " TVector.test_5_throw_when_try_applying_for_position_abroad");
-  TestSystem::start_test(test_6_check_is_empty, " TVector.test_6_check_is_empty");
-  TestSystem::start_test(test_7_check_front_back_begin_end, " TVector.test_7_check_front_back_begin_end");
-  TestSystem::start_test(test_8_throw_when_try_use_front_in_empty_vector, " TVector.test_8_throw_when_try_use_front_in_empty_vector");
-  TestSystem::start_test(test_9_throw_when_try_use_back_in_empty_vector, " TVector.test_9_throw_when_try_use_back_in_empty_vector");
-  TestSystem::start_test(test_10_check_begin_and_end_in_empty_vector, " TVector.test_10_check_begin_and_end_in_empty_vector");
-  TestSystem::start_test(test_11_check_push_front, " TVector.test_11_check_push_front");
-  TestSystem::start_test(test_12_check_push_front_in_empty_vector, " TVector.test_12_check_push_front_in_empty_vector");
-  TestSystem::start_test(test_13_check_push_back, " TVector.test_13_check_push_back");
-  TestSystem::start_test(test_14_check_push_back_in_empty_vector, " TVector.test_14_check_push_back_in_empty_vector");
-  TestSystem::start_test(test_15_check_several_push, " TVector.test_15_check_several_push");
-  TestSystem::start_test(test_16_check_insert, " TVector.test_16_check_insert");
-  TestSystem::start_test(test_17_throw_when_insert_in_non_existent_position, " TVector.test_17_throw_when_insert_in_non_existent_position");
-  TestSystem::start_test(test_18_check_insert_in_empty_vector, " TVector.test_18_check_insert_in_empty_vector");
-  TestSystem::start_test(test_19_check_pop_front, " TVector.test_19_check_pop_front");
-  TestSystem::start_test(test_20_check_pop_front_whith_push_front, " TVector.test_20_check_pop_front_whith_push_front");
-  TestSystem::start_test(test_21_check_pop_front_whith_push_back, " TVector.test_21_check_pop_front_whith_push_back");
-  TestSystem::start_test(test_22_check_pop_front_whith_insert, " TVector.test_22_check_pop_front_whith_insert");
-  TestSystem::start_test(test_23_throw_when_pop_front_in_empty_vector, " TVector.test_23_throw_when_pop_front_in_empty_vector");
-  TestSystem::start_test(test_24_check_pop_back, " TVector.test_24_check_pop_back");
-  TestSystem::start_test(test_25_throw_when_pop_back_in_empty_vector, " TVector.test_25_throw_when_pop_back_in_empty_vector");
-  TestSystem::start_test(test_26_check_pop_back_with_pop_front, " TVector.test_26_check_pop_back_with_pop_front");
-  TestSystem::start_test(test_27_delete_all_and_check_push_and_insert, " TVector.test_27_delete_all_and_check_push_and_insert");
-  TestSystem::start_test(test_28_check_pop_back_with_push_front, " TVector.test_28_check_pop_back_with_push_front");
-  TestSystem::start_test(test_29_check_pop_back_with_push_back, " TVector.test_29_check_pop_back_with_push_back");
-  TestSystem::start_test(test_30_check_pop_back_with_insert, " TVector.test_30_check_pop_back_with_insert");
-  TestSystem::start_test(test_31_check_erase, " TVector.test_31_check_erase");
-  TestSystem::start_test(test_32_throw_when_erase_in_empty_vector, " TVector.test_32_throw_when_erase_in_empty_vector");
-  TestSystem::start_test(test_33_throw_when_erase_for_a_non_existent_position, " TVector.test_33_throw_when_erase_for_a_non_existent_position");
-  TestSystem::start_test(test_34_check_several_push_insert_and_erase, " TVector.test_34_check_several_push_insert_and_erase");
-  TestSystem::start_test(test_35_check_insert_whith_count_in_empty_vector, " TVector.test_35_check_insert_whith_count_in_empty_vector");
-  TestSystem::start_test(test_36_check_insert_whith_count_and_deleted, " TVector.test_36_check_insert_whith_count_and_deleted");
-  TestSystem::start_test(test_37_check_insert_whith_count_whithout_deleted, " TVector.test_37_check_insert_whith_count_whithout_deleted");
-  TestSystem::start_test(test_38_check_insert_whith_zero_count, " TVector.test_38_check_insert_whith_zero_count");
-  TestSystem::start_test(test_39_throw_when_insert_whith_count_in_non_existent_position,
+  TestSystem::start_test(test_1_check_create_default_vector,
+    " TVector.test_1_check_create_default_vector");
+  TestSystem::start_test(test_2_check_create_vector_with_initialization,
+    " TVector.test_2_check_create_vector_with_initialization");
+  TestSystem::start_test(test_3_check_create_vector_with_initialization_list,
+    " TVector.test_3_check_create_vector_with_initialization_list");
+  TestSystem::start_test(test_4_check_check_create_vector_with_copy,
+    " TVector.test_4_check_check_create_vector_with_copy");
+  TestSystem::start_test(test_5_throw_when_try_applying_for_position_abroad,
+    " TVector.test_5_throw_when_try_applying_for_position_abroad");
+  TestSystem::start_test(test_6_check_is_empty,
+    " TVector.test_6_check_is_empty");
+  TestSystem::start_test(test_7_check_front_back_begin_end,
+    " TVector.test_7_check_front_back_begin_end");
+  TestSystem::start_test(test_8_throw_when_try_use_front_in_empty_vector,
+    " TVector.test_8_throw_when_try_use_front_in_empty_vector");
+  TestSystem::start_test(test_9_throw_when_try_use_back_in_empty_vector,
+    " TVector.test_9_throw_when_try_use_back_in_empty_vector");
+  TestSystem::start_test(test_10_check_begin_and_end_in_empty_vector,
+    " TVector.test_10_check_begin_and_end_in_empty_vector");
+  TestSystem::start_test(test_11_check_push_front,
+    " TVector.test_11_check_push_front");
+  TestSystem::start_test(test_12_check_push_front_in_empty_vector,
+    " TVector.test_12_check_push_front_in_empty_vector");
+  TestSystem::start_test(test_13_check_push_back,
+    " TVector.test_13_check_push_back");
+  TestSystem::start_test(test_14_check_push_back_in_empty_vector,
+    " TVector.test_14_check_push_back_in_empty_vector");
+  TestSystem::start_test(test_15_check_several_push,
+    " TVector.test_15_check_several_push");
+  TestSystem::start_test(test_16_check_insert,
+    " TVector.test_16_check_insert");
+  TestSystem::start_test(test_17_throw_when_insert_in_non_existent_position,
+    " TVector.test_17_throw_when_insert_in_non_existent_position");
+  TestSystem::start_test(test_18_check_insert_in_empty_vector,
+    " TVector.test_18_check_insert_in_empty_vector");
+  TestSystem::start_test(test_19_check_pop_front,
+    " TVector.test_19_check_pop_front");
+  TestSystem::start_test(test_20_check_pop_front_whith_push_front,
+    " TVector.test_20_check_pop_front_whith_push_front");
+  TestSystem::start_test(test_21_check_pop_front_whith_push_back,
+    " TVector.test_21_check_pop_front_whith_push_back");
+  TestSystem::start_test(test_22_check_pop_front_whith_insert,
+    " TVector.test_22_check_pop_front_whith_insert");
+  TestSystem::start_test(test_23_throw_when_pop_front_in_empty_vector,
+    " TVector.test_23_throw_when_pop_front_in_empty_vector");
+  TestSystem::start_test(test_24_check_pop_back,
+    " TVector.test_24_check_pop_back");
+  TestSystem::start_test(test_25_throw_when_pop_back_in_empty_vector,
+    " TVector.test_25_throw_when_pop_back_in_empty_vector");
+  TestSystem::start_test(test_26_check_pop_back_with_pop_front,
+    " TVector.test_26_check_pop_back_with_pop_front");
+  TestSystem::start_test(test_27_delete_all_and_check_push_and_insert,
+    " TVector.test_27_delete_all_and_check_push_and_insert");
+  TestSystem::start_test(test_28_check_pop_back_with_push_front,
+    " TVector.test_28_check_pop_back_with_push_front");
+  TestSystem::start_test(test_29_check_pop_back_with_push_back,
+    " TVector.test_29_check_pop_back_with_push_back");
+  TestSystem::start_test(test_30_check_pop_back_with_insert,
+    " TVector.test_30_check_pop_back_with_insert");
+  TestSystem::start_test(test_31_check_erase,
+    " TVector.test_31_check_erase");
+  TestSystem::start_test(test_32_throw_when_erase_in_empty_vector,
+    " TVector.test_32_throw_when_erase_in_empty_vector");
+  TestSystem::start_test(test_33_throw_when_erase_for_a_non_existent_position,
+    " TVector.test_33_throw_when_erase_for_a_non_existent_position");
+  TestSystem::start_test(test_34_check_several_push_insert_and_erase,
+    " TVector.test_34_check_several_push_insert_and_erase");
+  TestSystem::start_test(test_35_check_insert_whith_count_in_empty_vector,
+    " TVector.test_35_check_insert_whith_count_in_empty_vector");
+  TestSystem::start_test(test_36_check_insert_whith_count_and_deleted,
+    " TVector.test_36_check_insert_whith_count_and_deleted");
+  TestSystem::start_test(test_37_check_insert_whith_count_whithout_deleted,
+    " TVector.test_37_check_insert_whith_count_whithout_deleted");
+  TestSystem::start_test(test_38_check_insert_whith_zero_count,
+    " TVector.test_38_check_insert_whith_zero_count");
+  TestSystem::start_test
+  (test_39_throw_when_insert_whith_count_in_non_existent_position,
     " TVector.test_39_throw_when_insert_whith_count_in_non_existent_position");
   TestSystem::start_test(test_40_throw_when_erase_with_range_in_empty_vector,
     " TVector.test_40_throw_when_erase_with_range_in_empty_vector");
@@ -1277,14 +1336,21 @@ int main() {
     " TVector.test_42_check_erase_whith_range_without_deleted");
   TestSystem::start_test(test_43_check_erase_whith_range_and_deleted,
     " TVector.test_43_check_erase_whith_range_and_deleted");
-  TestSystem::start_test(test_44_check_erase_whith_pointers, " TVector.test_44_check_erase_whith_pointers");
-  TestSystem::start_test(test_45_check_erase_whith_pointers_and_deleted, " TVector.test_45_check_erase_whith_pointers_and_deleted");
-  TestSystem::start_test(test_46_throw_when_replace_for_non_existent_position, " TVector.test_46_throw_when_replace_for_non_existent_position");
-  TestSystem::start_test(test_47_throw_when_replace_in_empty_vector, " TVector.test_47_throw_when_replace_in_empty_vector");
-  TestSystem::start_test(test_48_check_replace, " TVector.test_48_check_replace");
-  TestSystem::start_test(test_49_throw_when_erase_with_pointers_out_of_range_error,
+  TestSystem::start_test(test_44_check_erase_whith_pointers,
+    " TVector.test_44_check_erase_whith_pointers");
+  TestSystem::start_test(test_45_check_erase_whith_pointers_and_deleted,
+    " TVector.test_45_check_erase_whith_pointers_and_deleted");
+  TestSystem::start_test(test_46_throw_when_replace_for_non_existent_position,
+    " TVector.test_46_throw_when_replace_for_non_existent_position");
+  TestSystem::start_test(test_47_throw_when_replace_in_empty_vector,
+    " TVector.test_47_throw_when_replace_in_empty_vector");
+  TestSystem::start_test(test_48_check_replace,
+    " TVector.test_48_check_replace");
+  TestSystem::start_test
+  (test_49_throw_when_erase_with_pointers_out_of_range_error,
     " TVector.test_49_throw_when_erase_with_pointers_out_of_range_error");
-  TestSystem::start_test(test_50_throw_when_erase_with_pointers_invalid_range_error,
+  TestSystem::start_test
+  (test_50_throw_when_erase_with_pointers_invalid_range_error,
     " TVector.test_50_throw_when_erase_with_pointers_invalid_range_error");
   TestSystem::start_test(test_51_throw_when_erase_with_pointers_empty_range,
     " TVector.test_51_throw_when_erase_with_pointers_empty_range");
@@ -1292,11 +1358,15 @@ int main() {
     " TVector.test_52_check_replace_with_pointers");
   TestSystem::start_test(test_53_throw_when_replace_with_pointers_nullptr,
     " TVector.test_53_throw_when_replace_with_pointers_nullptr");
-  TestSystem::start_test(test_54_throw_when_replace_with_pointers_out_of_range_left,
+  TestSystem::start_test
+  (test_54_throw_when_replace_with_pointers_out_of_range_left,
     " TVector.test_54_throw_when_replace_with_pointers_out_of_range_left");
-  TestSystem::start_test(test_55_throw_when_replace_with_pointers_out_of_range_right,
+  TestSystem::start_test
+  (test_55_throw_when_replace_with_pointers_out_of_range_right,
     " TVector.test_55_throw_when_replace_with_pointers_out_of_range_right");
-  TestSystem::start_test(test_56_check_clear, " TVector.test_56_check_clear");
+  TestSystem::start_test(test_56_check_clear,
+    " TVector.test_56_check_clear");
+
   TestSystem::print_final_info();
   system("pause");
   return 0;
