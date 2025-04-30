@@ -55,14 +55,14 @@ class TVector {
   void replace(T* pos, const T& new_value);
   void replace(size_t pos, const T& new_value);
 
-  void assign(size_t size, const T& value);
-  inline const T& at(size_t pos) const;
+  void assign(size_t count, const T& value);
+  inline T& at(size_t pos);
   void clear() noexcept;
 
   void shrink_to_fit() noexcept;
   void reserve(size_t new_capacity);
-  void resize(size_t size);
-  void resize(size_t size, const T& value);
+  void resize(size_t new_size);
+  void resize(size_t new_size, const T& value);
 
   TVector<T>& operator=(const TVector<T>& other);
   bool operator==(const TVector<T>& other) const;
@@ -83,6 +83,10 @@ class TVector {
   inline bool is_full() const noexcept;
   void reallocate(size_t new_size);
   void reallocate_for_deleted();
+
+  void create_new_arrays(size_t new_capacity, T*& new_data, State*& new_states);
+  void copy_busy_elements(T* new_data, State* new_states, size_t limit);
+  void replace_arrays(T* new_data, State* new_states, size_t new_capacity);
 
   friend int rand_generation(int min, int max);
   friend void swap(T* first_elem, T* second_elem);
@@ -435,6 +439,34 @@ void TVector<T>::replace(size_t pos, const T& new_value) {
 }
 
 template<class T>
+void TVector<T>::assign(size_t count, const T& value) {
+  clear();
+
+  if (count == 0) return;
+
+  if (count > _capacity) {
+    reserve(count);
+  }
+
+  for (size_t i = 0; i < count; i++) {
+    _data[i] = value;
+    _states[i] = busy;
+  }
+
+  _size = count;
+  _deleted = 0;
+}
+
+template<class T>
+inline T& TVector<T>::at(size_t pos) {
+  if (pos >= _size) {
+throw std::out_of_range("Index out of range");
+}
+  size_t it = real_pos(pos);
+  return _data[it];
+}
+
+template<class T>
 void TVector<T>::clear() noexcept {
   for (size_t i = 0; i < _size + _deleted; i++) {
     _states[i] = empty;
@@ -442,6 +474,100 @@ void TVector<T>::clear() noexcept {
 
   _size = 0;
   _deleted = 0;
+}
+
+template<class T>
+void TVector<T>::shrink_to_fit() noexcept {
+  if (_capacity == _size || _size == 0) return;
+
+  T* new_data;
+  State* new_states;
+
+  create_new_arrays(_size, new_data, new_states);
+
+  copy_busy_elements(new_data, new_states, _size + _deleted);
+
+  replace_arrays(new_data, new_states, _size);
+}
+
+template<class T>
+void TVector<T>::reserve(size_t new_capacity) {
+  if (new_capacity <= _capacity) {
+    return;
+  }
+
+  T* new_data;
+  State* new_states;
+
+  create_new_arrays(new_capacity, new_data, new_states);
+  if (_size != 0) {
+    copy_busy_elements(new_data, new_states, _size + _deleted);
+  }
+
+  replace_arrays(new_data, new_states, new_capacity);
+}
+
+template<class T>
+void TVector<T>::resize(size_t new_size) {
+  resize(new_size, T());
+}
+
+template<class T>
+void TVector<T>::resize(size_t new_size, const T& value) {
+  if (_size == new_size) return;
+
+  if (new_size == 0) {
+    clear();
+    return;
+  }
+
+  if (_size > new_size) {
+    for (size_t i = real_pos(new_size); i < _size + _deleted; i++) {
+      if (_states[i] != empty) {
+        if (_states[i] == deleted) --_deleted;
+        _states[i] = empty;
+      }
+    }
+    _size = new_size;
+    reallocate_for_deleted();
+    return;
+  }
+  if (_size < new_size) {
+    reserve(new_size);
+
+    for (size_t i = _size; i < new_size; i++) {
+      _data[i] = value;
+      _states[i] = busy;
+    }
+    _size = new_size;
+  }
+
+}
+
+template<class T>
+TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
+  if (this == &other) {
+    return *this;
+  }
+  T* new_data;
+  State* new_states;
+
+  create_new_arrays(other._capacity, new_data, new_states);
+
+  for (size_t i = 0; i < other._capacity; ++i) {
+    new_data[i] = other._data[i];
+    new_states[i] = other._states[i];
+  }
+  delete[] _data;
+  delete[] _states;
+
+  _data = new_data;
+  _states = new_states;
+  _size = other._size;
+  _capacity = other._capacity;
+  _deleted = other._deleted;
+
+  return *this;
 }
 
 template<class T>
@@ -490,18 +616,12 @@ inline const T* TVector<T>::end() const noexcept {
 
 template<class T>
 const T& TVector<T>::operator[](size_t pos) const {
-  if (pos >= _size) {
-    throw std::out_of_range("Index out of range");
-  }
   size_t it = real_pos(pos);
   return _data[it];
 }
 
 template<class T>
 T& TVector<T>::operator[](size_t pos) {
-  if (pos >= _size) {
-    throw std::out_of_range("Index out of range");
-  }
   size_t it = real_pos(pos);
   return _data[it];
 }
@@ -543,32 +663,7 @@ template<class T>
 void TVector<T>::reallocate(size_t new_size) {
   if (new_size <= _capacity) return;
   size_t new_capacity = (new_size / STEP_OF_CAPACITY + 1) * STEP_OF_CAPACITY;
-
-  T* new_data = new T[new_capacity];
-  State* new_states = new State[new_capacity];
-
-  for (size_t i = 0; i < new_capacity; i++) {
-    new_states[i] = empty;
-  }
-
-  if (_size != 0) {
-    size_t busy_count = 0;
-    for (size_t i = 0; i < _size + _deleted; i++) {
-      if (_states[i] == busy) {
-        new_data[busy_count] = _data[i];
-        new_states[busy_count] = busy;
-        busy_count++;
-      }
-    }
-  }
-
-  delete[] _data;
-  delete[] _states;
-
-  _data = new_data;
-  _states = new_states;
-  _capacity = new_capacity;
-  _deleted = 0;
+  reserve(new_capacity);
 }
 
 template<class T>
@@ -582,49 +677,55 @@ void TVector<T>::reallocate_for_deleted() {
 
   if (_size == 0) {
     size_t new_capacity = (_size / STEP_OF_CAPACITY + 1) * STEP_OF_CAPACITY;
-    T* new_data = new T[new_capacity];
-    State* new_states = new State[new_capacity];
-
-    for (size_t i = 0; i < new_capacity; i++) {
-      new_states[i] = empty;
-    }
-
-    delete[] _data;
-    delete[] _states;
-
-    _data = new_data;
-    _states = new_states;
-    _capacity = new_capacity;
-    _deleted = 0;
+    T* new_data;
+    State* new_states;
+    create_new_arrays(new_capacity, new_data, new_states);
+    replace_arrays(new_data, new_states, new_capacity);
+    return;
   }
 
   if (_deleted >= DELETED_THRESHOLD * (_size + _deleted)
     || _deleted >= MAX_DELETED_COUNT) {
     size_t new_capacity = (_size / STEP_OF_CAPACITY + 1) * STEP_OF_CAPACITY;
-    T* new_data = new T[new_capacity];
-    State* new_states = new State[new_capacity];
-
-    for (size_t i = 0; i < new_capacity; i++) {
-      new_states[i] = empty;
-    }
-
-    size_t busy_count = 0;
-    for (size_t i = 0; i < _size + _deleted; i++) {
-      if (_states[i] == busy) {
-        new_data[busy_count] = _data[i];
-        new_states[busy_count] = busy;
-        busy_count++;
-      }
-    }
-
-    delete[] _data;
-    delete[] _states;
-
-    _data = new_data;
-    _states = new_states;
-    _capacity = new_capacity;
-    _deleted = 0;
+    T* new_data;
+    State* new_states;
+    create_new_arrays(new_capacity, new_data, new_states);
+    copy_busy_elements(new_data, new_states, _size + _deleted);
+    replace_arrays(new_data, new_states, new_capacity);
   }
+}
+
+template<class T>
+void TVector<T>::create_new_arrays(size_t new_capacity, T*& new_data, State*& new_states) {
+  new_data = new T[new_capacity];
+  new_states = new State[new_capacity];
+
+  for (size_t i = 0; i < new_capacity; i++) {
+    new_states[i] = empty;
+  }
+}
+
+template<class T>
+void TVector<T>::copy_busy_elements(T* new_data, State* new_states, size_t limit) {
+  size_t busy_count = 0;
+  for (size_t i = 0; i < limit; i++) {
+    if (_states[i] == busy) {
+      new_data[busy_count] = _data[i];
+      new_states[busy_count] = busy;
+      busy_count++;
+    }
+  }
+}
+
+template<class T>
+void TVector<T>::replace_arrays(T* new_data, State* new_states, size_t new_capacity) {
+  delete[] _data;
+  delete[] _states;
+
+  _data = new_data;
+  _states = new_states;
+  _capacity = new_capacity;
+  _deleted = 0;
 }
 
 #endif  // ONLINE_GAME_STORE_PROJECT_TVECTOR_MY_VECTOR_H_

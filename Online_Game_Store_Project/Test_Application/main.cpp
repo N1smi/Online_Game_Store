@@ -148,14 +148,14 @@ bool test_4_check_check_create_vector_with_copy() {
   return result;
 }
 
-bool test_5_throw_when_try_applying_for_position_abroad() {
+bool test_5_throw_when_try_applying_for_position_abroad_whis_at() {
   TVector<double> vec_1(100);
   bool expected_result = false;
   bool actual_result = true;
   try {
     // print_vect(vec_1);
     // print_stat(vec_1);
-    double error = vec_1[100];
+    double error = vec_1.at(100);
   }
   catch (const std::exception& ex) {
     std::cerr << ex.what();
@@ -657,7 +657,6 @@ bool test_29_check_pop_back_with_push_back() {
     && (TestSystem::check(112, vec_1[27]))
     && (TestSystem::check(113, vec_1[28]));;
   return result;
-
 }
 
 bool test_30_check_pop_back_with_insert() {
@@ -995,24 +994,27 @@ bool test_45_check_erase_whith_pointers_and_deleted() {
   for (size_t i = 0; i < 50; i++) {
     vec_1.insert(i, i + 1);
   }
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
 
   vec_1.pop_front();
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.erase(vec_1.begin() + 1, vec_1.begin() + 7);
 
-  //print_vect(vec_1);
-  //print_stat(vec_1);
-  //std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
-  bool result = (TestSystem::check((size_t)43, vec_1.size())) && (TestSystem::check((size_t)60, vec_1.capacity())) &&
-    (TestSystem::check(2, vec_1[0])) && (TestSystem::check(9, vec_1[1])) && (TestSystem::check(50, vec_1.back()));
+  bool result = (TestSystem::check(static_cast<size_t>(43), vec_1.size()))
+    && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
+    && (TestSystem::check(2, vec_1[0]))
+    && (TestSystem::check(9, vec_1[1]))
+    && (TestSystem::check(50, vec_1.back()));
   return result;
 }
 
@@ -1238,7 +1240,244 @@ bool test_56_check_clear() {
     && (TestSystem::check(static_cast<size_t>(105), vec_1.capacity()))
     && (TestSystem::check(vec_1.is_empty(), true));
   return result;
+}
 
+bool test_57_check_reserve() {
+  TVector<int> vec_1(10);
+
+  vec_1.reserve(5);
+  bool check1 = (TestSystem::check(static_cast<size_t>(10), vec_1.capacity()));
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << ' ' << vec_1.capacity() << std::endl;
+
+  vec_1.reserve(100);
+  bool check2 = (TestSystem::check(static_cast<size_t>(100), vec_1.capacity()))
+    && (TestSystem::check(static_cast<size_t>(10), vec_1.size()));
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << ' ' << vec_1.capacity() << std::endl;
+  bool elements_ok = true;
+  for (int i = 0; i < 10; ++i) {
+    if (vec_1[i] != 0) {
+      elements_ok = false;
+      break;
+    }
+  }
+  bool check3 = TestSystem::check(true, elements_ok);
+
+  return check1 && check2 && check3;
+}
+
+bool test_58_check_resize() {
+  TVector<int> vec(10);
+
+  for (size_t i = 0; i < 10; ++i) {
+    vec[i] = static_cast<int>(i);
+  }
+
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  vec.resize(5);
+  bool check1 = (TestSystem::check(static_cast<size_t>(5), vec.size())) &&
+    (TestSystem::check(4, vec.back()));
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  vec.resize(8);
+  bool check2 = (TestSystem::check(static_cast<size_t>(8), vec.size())) &&
+    (TestSystem::check(0, vec[6])) &&
+      (TestSystem::check(static_cast<int>(4), vec[4]));
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  return check1 && check2;
+}
+
+bool test_59_check_resize_with_deleted() {
+  TVector<int> vec(30);
+
+  for (size_t i = 0; i < 30; ++i) {
+    vec[i] = static_cast<int>(i);
+  }
+  vec.erase(2, 3);
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  vec.resize(10);
+  bool check1 = (TestSystem::check(static_cast<size_t>(10), vec.size())) &&
+    (TestSystem::check(static_cast<int>(1), vec[1]))
+    && (TestSystem::check(static_cast<int>(3), vec[2]))
+    && (TestSystem::check(static_cast<size_t>(30), vec.capacity()));
+
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  vec.erase(2, 3);
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  vec.resize(16,777);
+  bool check2 = (TestSystem::check(static_cast<size_t>(16), vec.size())) &&
+    (TestSystem::check(static_cast<int>(4), vec[2])) 
+    && (TestSystem::check(static_cast<int>(777), vec[15]))
+    && (TestSystem::check(static_cast<size_t>(16), vec.capacity()));
+
+    // print_vect(vec);
+    // print_stat(vec);
+    // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  return check1 && check2;
+}
+
+bool test_60_check_resize_with_non_trivial_cases() {
+  TVector<int> vec;
+
+  vec.resize(0);
+  bool check1 = (TestSystem::check(static_cast<size_t>(0), vec.size()));
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  vec.resize(5);
+  bool check2 = (TestSystem::check(static_cast<size_t>(5), vec.size())) &&
+    (TestSystem::check(static_cast<int>(0), vec[3]));
+
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  for (size_t i = 0; i < 5; ++i) {
+    vec[i] = static_cast<int>(i);
+  }
+  vec.erase(1, 4);
+  vec.resize(0);
+  bool check3 = (TestSystem::check(static_cast<size_t>(0), vec.size())) &&
+    (TestSystem::check(static_cast<size_t>(15), vec.capacity()));
+
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  return check1 && check2 && check3;
+}
+
+bool test_61_check_shrink_to_fit() {
+  TVector<int> vec(50);
+
+  for (int i = 0; i < 50; ++i) {
+    vec[i] = i;
+  }
+
+  vec.push_front(333);
+  // print_vect(vec);
+  // print_stat(vec);
+  vec.erase(0, 5);
+  // print_vect(vec);
+  // print_stat(vec);
+  vec.shrink_to_fit();
+  // print_vect(vec);
+  // print_stat(vec);
+  bool check1 = (TestSystem::check(static_cast<size_t>(46), vec.size()))
+    && (TestSystem::check(static_cast<size_t>(46), vec.capacity()));
+
+  // Пустой вектор
+  TVector<int> empty_vec;
+  empty_vec.shrink_to_fit();
+  bool check2 = (TestSystem::check(static_cast<size_t>(0), empty_vec.capacity()));
+
+  return check1 && check2;
+}
+
+bool test_62_check_assign() {
+  TVector<int> vec;
+  vec.assign(5, 42);
+
+  bool check1 = (TestSystem::check(static_cast<size_t>(5), vec.size())) &&
+    (TestSystem::check(42, vec[0])) &&
+    (TestSystem::check(42, vec[4]));
+
+  // print_vect(vec);
+  // print_stat(vec);
+
+  vec.assign(3, 10);
+  bool check2 = (TestSystem::check(static_cast<size_t>(3), vec.size())) &&
+    (TestSystem::check(10, vec[2]));
+
+  // print_vect(vec);
+  // print_stat(vec);
+
+  return check1 && check2;
+}
+
+bool test_63_check_assign_with_deleted() {
+  TVector<int> vec(100);
+  // print_vect(vec);
+  // print_stat(vec);
+  vec.erase(3, 7);
+  // print_vect(vec);
+  // print_stat(vec);
+  vec.assign(8, 100);
+  // print_vect(vec);
+  // print_stat(vec);
+
+  return TestSystem::check(static_cast<size_t>(8), vec.size()) &&
+  TestSystem::check(100, vec[7]);
+}
+
+bool test_64_assign_empty() {
+  TVector<std::string> vec(5);
+  vec.assign(0, "test");
+
+  return TestSystem::check(static_cast<size_t>(0), vec.size()) &&
+    TestSystem::check(true, vec.is_empty());
+}
+
+bool test_65_operator_equally_basic(){
+  TVector<int> v1(5);
+  for (int i = 0; i < 5; ++i) v1[i] = i + 1;
+
+  TVector<int> v2;
+  v2 = v1;
+  // print_vect(v2);
+  // print_stat(v2);
+  bool size_ok = TestSystem::check(v1.size(), v2.size());
+  bool capacity_ok = TestSystem::check(v1.capacity(), v2.capacity());
+  bool data_ok = true;
+  for (size_t i = 0; i < v1.size(); i++) {
+    if (v1[i] != v2[i]) data_ok = false;
+  }
+
+  return size_ok && data_ok && capacity_ok;
+}
+
+bool test_66_operator_equally_with_deleted() {
+  TVector<int> v1(30);
+  for (int i = 0; i < 30; ++i) v1[i] = i;
+  // print_vect(v1);
+  // print_stat(v1);
+  v1.erase(3, 7);
+  // print_vect(v1);
+  // print_stat(v1);
+  TVector<int> v2;
+  v2 = v1;
+  // print_vect(v2);
+  // print_stat(v2);
+
+  bool data_ok = true;
+  for (size_t i = 0; i < v1.size(); i++) {
+    if (v1[i] != v2[i]) data_ok = false;
+  }
+
+  return TestSystem::check(v1.size(), v2.size()) &&
+    TestSystem::check(v1.capacity(), v2.capacity()) && data_ok;
 }
 
 int main() {
@@ -1257,8 +1496,9 @@ int main() {
     " TVector.test_3_check_create_vector_with_initialization_list");
   TestSystem::start_test(test_4_check_check_create_vector_with_copy,
     " TVector.test_4_check_check_create_vector_with_copy");
-  TestSystem::start_test(test_5_throw_when_try_applying_for_position_abroad,
-    " TVector.test_5_throw_when_try_applying_for_position_abroad");
+  TestSystem::start_test
+  (test_5_throw_when_try_applying_for_position_abroad_whis_at,
+    " TVector.test_5_throw_when_try_applying_for_position_abroad_whis_at");
   TestSystem::start_test(test_6_check_is_empty,
     " TVector.test_6_check_is_empty");
   TestSystem::start_test(test_7_check_front_back_begin_end,
@@ -1366,6 +1606,26 @@ int main() {
     " TVector.test_55_throw_when_replace_with_pointers_out_of_range_right");
   TestSystem::start_test(test_56_check_clear,
     " TVector.test_56_check_clear");
+  TestSystem::start_test(test_57_check_reserve,
+    " TVector.test_57_check_reserve");
+  TestSystem::start_test(test_58_check_resize,
+    " TVector.test_58_check_resize");
+  TestSystem::start_test(test_59_check_resize_with_deleted,
+    " TVector.test_59_check_resize_with_deleted");
+  TestSystem::start_test(test_60_check_resize_with_non_trivial_cases,
+    " TVector.test_60_check_resize_with_non_trivial_cases");
+  TestSystem::start_test(test_61_check_shrink_to_fit,
+    " TVector.test_61_check_shrink_to_fit");
+  TestSystem::start_test(test_62_check_assign,
+    " TVector.test_62_check_assign");
+  TestSystem::start_test(test_63_check_assign_with_deleted,
+    " TVector.test_63_check_assign_with_deleted");
+  TestSystem::start_test(test_64_assign_empty,
+    " TVector.test_64_assign_empty");
+  TestSystem::start_test(test_65_operator_equally_basic,
+    " TVector.test_65_operator_equally_basic");
+  TestSystem::start_test(test_66_operator_equally_with_deleted,
+    " TVector.test_66_operator_equally_with_deleted");
 
   TestSystem::print_final_info();
   system("pause");
