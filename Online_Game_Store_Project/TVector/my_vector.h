@@ -4,6 +4,7 @@
 #define ONLINE_GAME_STORE_PROJECT_TVECTOR_MY_VECTOR_H_
 
 #include <iostream>
+#include <random>
 
 enum State { empty, busy, deleted };
 
@@ -71,11 +72,23 @@ class TVector {
   const T& operator[](size_t pos) const;
   T& operator[](size_t pos);
 
+  template<typename T>
+  friend void swap(T& first_elem, T& second_elem);
+
+  template<typename T>
   friend void shuffle(TVector<T>& vec);
+
+  template<typename T>
   friend void sort(TVector<T>& vec);
-  friend T* find_first(const TVector<T>& vec, const T& value);
-  friend T* find_last(const TVector<T>& vec, const T& value);
-  friend TVector<T*> find(const TVector<T>& vec, const T& value);
+
+  template<typename T>
+  friend T* find_first(TVector<T>& vec, const T& value);
+
+  template<typename T>
+  friend T* find_last(TVector<T>& vec, const T& value);
+
+  template<typename T>
+  friend TVector<T*> find(TVector<T>& vec, const T& value);
 
  private:
   size_t real_pos(size_t pos);
@@ -87,10 +100,6 @@ class TVector {
   void create_new_arrays(size_t new_capacity, T*& new_data, State*& new_states);
   void copy_busy_elements(T* new_data, State* new_states, size_t limit);
   void replace_arrays(T* new_data, State* new_states, size_t new_capacity);
-
-  friend int rand_generation(int min, int max);
-  friend void swap(T* first_elem, T* second_elem);
-  friend void reallocate_for_sort(TVector<T>& vec);
 };
 
 template <class T>
@@ -131,11 +140,9 @@ TVector<T>::TVector(const TVector<T>& other) {
   _data = (_capacity == 0) ? nullptr : new T[_capacity];
   _states = (_capacity == 0) ? nullptr : new State[_capacity];
 
-  if (_capacity != 0) {
-    for (size_t i = 0; i < other._capacity; i++) {
-      _data[i] = other._data[i];
-      _states[i] = other._states[i];
-    }
+  for (size_t i = 0; i < other._capacity; i++) {
+    _data[i] = other._data[i];
+    _states[i] = other._states[i];
   }
 }
 
@@ -186,6 +193,50 @@ inline T* TVector<T>::begin() noexcept {
 
 template <class T>
 inline T* TVector<T>::end() noexcept {
+  T* main_address = nullptr;
+  if (!is_empty()) {
+    main_address = (real_address(_size - 1) + 1);
+  }
+  return main_address;
+}
+
+template<class T>
+inline const T* TVector<T>::data() const noexcept {
+  return _data;
+}
+
+template<class T>
+inline size_t TVector<T>::size() const noexcept {
+  return _size;
+}
+
+template<class T>
+inline size_t TVector<T>::capacity() const noexcept {
+  return _capacity;
+}
+
+template <class T>
+inline const T& TVector<T>::front() const {
+  if (is_empty()) throw std::out_of_range("Use front() in empty vector!");
+  size_t it = real_pos(0);
+  return _data[it];
+}
+
+template <class T>
+inline const T& TVector<T>::back() const {
+  if (is_empty()) throw std::out_of_range("Use back() in empty vector!");
+  size_t it = real_pos(_size - 1);
+  return _data[it];
+}
+
+template <class T>
+inline const T* TVector<T>::begin() const noexcept {
+  T* main_address = real_address(0);
+  return main_address;
+}
+
+template <class T>
+inline const T* TVector<T>::end() const noexcept {
   T* main_address = nullptr;
   if (!is_empty()) {
     main_address = (real_address(_size - 1) + 1);
@@ -377,6 +428,7 @@ void TVector<T>::erase(T* first, T* last) {
   }
 
   size_t first_pos = first - begin();
+
   size_t last_pos = last - begin();
 
   erase(first_pos, last_pos);
@@ -460,7 +512,7 @@ void TVector<T>::assign(size_t count, const T& value) {
 template<class T>
 inline T& TVector<T>::at(size_t pos) {
   if (pos >= _size) {
-throw std::out_of_range("Index out of range");
+throw std::out_of_range("Index out of range in at()");
 }
   size_t it = real_pos(pos);
   return _data[it];
@@ -552,11 +604,15 @@ TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
   T* new_data;
   State* new_states;
 
-  create_new_arrays(other._capacity, new_data, new_states);
+  create_new_arrays(other._size, new_data, new_states);
 
+  size_t busy_count = 0;
   for (size_t i = 0; i < other._capacity; ++i) {
-    new_data[i] = other._data[i];
-    new_states[i] = other._states[i];
+    if (other._states[i] == busy) {
+      new_data[busy_count] = other._data[i];
+      new_states[busy_count] = other._states[i];
+      busy_count++;
+    }
   }
   delete[] _data;
   delete[] _states;
@@ -564,54 +620,51 @@ TVector<T>& TVector<T>::operator=(const TVector<T>& other) {
   _data = new_data;
   _states = new_states;
   _size = other._size;
-  _capacity = other._capacity;
-  _deleted = other._deleted;
+  _capacity = other._size;
+  _deleted = 0;
 
   return *this;
 }
 
 template<class T>
-inline const T* TVector<T>::data() const noexcept {
-  return _data;
-}
+bool TVector<T>::operator==(const TVector<T>& other) const {
+  if (this == &other) return true;
+  if (_size != other._size) return false;
+  if (_size == 0) return true;
 
-template<class T>
-inline size_t TVector<T>::size() const noexcept {
-  return _size;
-}
+  size_t phys_pos1 = 0;
+  size_t phys_pos2 = 0;
+  size_t busy_count = 0;
 
-template<class T>
-inline size_t TVector<T>::capacity() const noexcept {
-  return _capacity;
-}
+  while (busy_count < _size) {
 
-template <class T>
-inline const T& TVector<T>::front() const {
-  if (is_empty()) throw std::out_of_range("Use front() in empty vector!");
-  size_t it = real_pos(0);
-  return _data[it];
-}
+    while (phys_pos1 < _capacity && _states[phys_pos1] != busy) {
+      ++phys_pos1;
+    }
 
-template <class T>
-inline const T& TVector<T>::back() const {
-  if (is_empty()) throw std::out_of_range("Use back() in empty vector!");
-  size_t it = real_pos(_size - 1);
-  return _data[it];
-}
+    while (phys_pos2 < other._capacity && other._states[phys_pos2] != busy) {
+      ++phys_pos2;
+    }
 
-template <class T>
-inline const T* TVector<T>::begin() const noexcept {
-  T* main_address = real_address(0);
-  return main_address;
-}
+    if (phys_pos1 >= _capacity || phys_pos2 >= other._capacity) {
+      return false;
+    }
 
-template <class T>
-inline const T* TVector<T>::end() const noexcept {
-  T* main_address = nullptr;
-  if (!is_empty()) {
-    main_address = (real_address(_size - 1) + 1);
+    if (_data[phys_pos1] != other._data[phys_pos2]) {
+      return false;
+    }
+
+    ++phys_pos1;
+    ++phys_pos2;
+    ++busy_count;
   }
-  return main_address;
+
+  return true;
+}
+
+template<class T>
+bool TVector<T>::operator!=(const TVector<T>& other) const {
+  return !(*this == other);
 }
 
 template<class T>
@@ -627,7 +680,132 @@ T& TVector<T>::operator[](size_t pos) {
 }
 
 template<class T>
+void swap(T& first_elem, T& second_elem) {
+  if (first_elem == second_elem) {
+    return;
+  }
+
+  T temp = first_elem;
+  first_elem = second_elem;
+  second_elem = temp;
+}
+
+template<class T>
+void shuffle(TVector<T>& vec) {
+  if (vec.size() < 2) return;
+
+  static std::random_device rd;
+  static std::mt19937 gen(rd());
+
+  for (size_t i = 0; i < vec.size(); i++) {
+      std::uniform_int_distribution<size_t> dist(0, i);
+      size_t rand_i = dist(gen);
+      swap(vec[i], vec[rand_i]);
+  }
+}
+
+template<class T>
+T median_of_three(T a, T b, T c) {
+  if (a < b) {
+    if (b < c) return b;
+    else if (a < c) return c;
+    else return a;
+  }
+  else {
+    if (a < c) return a;
+    else if (b < c) return c;
+    else return b;
+  }
+}
+
+template<class T>
+void insertion_sort(TVector<T>& vec, size_t l, size_t r) {
+  for (size_t i = l + 1; i <= r; i++) {
+    T key = vec[i];
+    size_t j = i - 1;
+    while (j >= l && vec[j] > key) {
+      vec[j + 1] = vec[j];
+      j--;
+    }
+    vec[j + 1] = key;
+  }
+}
+
+template<class T>
+void hoar_sort_rec(TVector<T>& vec, size_t  l, size_t  r) {
+  if (r - l < 16) {
+    insertion_sort(vec, l, r);
+    return;
+  }
+
+  size_t i = l, j = r;
+  T x = median_of_three(vec[l], vec[(l + r) / 2], vec[r]);
+
+  do {
+    while (vec[i] < x) i++;
+    while (vec[j] > x) j--;
+
+    if (i <= j) {
+      if (i < j) {
+        swap(vec[i], vec[j]);
+      }
+      i++;
+      j--;
+    }
+  } while (i <= j);
+
+  if (l < j) hoar_sort_rec(vec, l, j);
+  if (i < r) hoar_sort_rec(vec, i, r);
+}
+
+template<class T>
+void sort(TVector<T>& vec) {
+  if (vec.size() <= 1) {
+    return;
+  }
+
+  TVector<T> vec_2;
+  vec_2 = vec;
+
+  hoar_sort_rec(vec_2, 0, (vec_2.size() - 1));
+
+  vec = vec_2;
+}
+
+template<class T>
+T* find_first(TVector<T>& vec, const T& value) {
+  for (size_t i = 0; i < vec.size(); i++) {
+    if (vec[i] == value) {
+      return &vec[i];
+    }
+  }
+  return nullptr;
+}
+
+template<class T>
+T* find_last(TVector<T>& vec, const T& value) {
+  for (size_t i = vec.size() - 1; i != static_cast<size_t>(-1); i--) {
+    if (vec[i] == value) {
+      return &vec[i];
+    }
+  }
+  return nullptr;
+}
+
+template<class T>
+TVector<T*> find(TVector<T>& vec, const T& value) {
+  TVector<T*> found;
+  for (size_t i = 0; i < vec.size(); i++) {
+    if (vec[i] == value) {
+      found.push_back(&vec[i]);
+    }
+  }
+  return found;
+}
+
+template<class T>
 size_t TVector<T>::real_pos(size_t pos) {
+  if (_deleted == 0) return pos;
   size_t busy_count = 0;
   for (size_t i = 0; i < _size + _deleted; i++) {
     if (_states[i] == busy) {
@@ -642,6 +820,7 @@ size_t TVector<T>::real_pos(size_t pos) {
 
 template<class T>
 T* TVector<T>::real_address(size_t pos) {
+  if (_deleted == 0) return &_data[pos];
   size_t busy_count = 0;
   for (size_t i = 0; i < _size + _deleted; i++) {
     if (_states[i] == busy) {
