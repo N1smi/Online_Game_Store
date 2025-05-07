@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
-#include "E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector\my_vector.h"
+#include "my_vector.h"  // NOLINT(build/include_subdir)
 #include "User.h"
 #include "Administrator.h"
 #include "Client.h"
