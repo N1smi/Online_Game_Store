@@ -1916,14 +1916,25 @@ bool test_75_find() {
 }
 
 bool test_76_sort() {
-  TVector<int> vec(1000000);
-  for (size_t i = 0; i < 1000000; i++) vec[i] = i;
+  TVector<int> vec(10000000);
+  for (size_t i = 0; i < 10000000; i++) vec[i] = i;
 
   shuffle(vec);
 
+  vec.push_front(0);
+
+   // print_vect(vec);
+   // print_stat(vec);
+
+  vec.erase(0);
+
+   // print_vect(vec);
+   // print_stat(vec);
+
   sort(vec);
 
-  // print_vect(vec);
+   // print_vect(vec);
+   // print_stat(vec);
 
   bool check_1 = true;
   for (size_t i = 1; i < vec.size(); i++) {
@@ -1932,6 +1943,7 @@ bool test_76_sort() {
       break;
     }
   }
+
   TVector<int> empty;
   sort(empty);
   bool check_2 = empty.is_empty();

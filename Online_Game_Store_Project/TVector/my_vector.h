@@ -72,6 +72,8 @@ class TVector {
   const T& operator[](size_t pos) const;
   T& operator[](size_t pos);
 
+  void defragment();
+
   template<typename T>
   friend void swap(T& first_elem, T& second_elem);
 
@@ -680,6 +682,23 @@ T& TVector<T>::operator[](size_t pos) {
 }
 
 template<class T>
+void TVector<T>::defragment() {
+  if (_deleted == 0) return;
+
+  T* new_data;
+  State* new_states;
+
+  size_t new_capacity = (_size / STEP_OF_CAPACITY + 1) * STEP_OF_CAPACITY;
+
+  create_new_arrays(new_capacity, new_data, new_states);
+
+  copy_busy_elements(new_data, new_states, _size + _deleted);
+
+  replace_arrays(new_data, new_states, new_capacity);
+  
+}
+
+template<class T>
 void swap(T& first_elem, T& second_elem) {
   if (first_elem == second_elem) {
     return;
@@ -693,6 +712,8 @@ void swap(T& first_elem, T& second_elem) {
 template<class T>
 void shuffle(TVector<T>& vec) {
   if (vec.size() < 2) return;
+
+  vec.defragment();
 
   static std::random_device rd;
   static std::mt19937 gen(rd());
@@ -764,12 +785,9 @@ void sort(TVector<T>& vec) {
     return;
   }
 
-  TVector<T> vec_2;
-  vec_2 = vec;
+  vec.defragment();
 
-  hoar_sort_rec(vec_2, 0, (vec_2.size() - 1));
-
-  vec = vec_2;
+  hoar_sort_rec(vec, 0, (vec.size() - 1));
 }
 
 template<class T>
