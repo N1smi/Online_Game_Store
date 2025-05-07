@@ -104,14 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\GameStoreCore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,11 +137,17 @@
     <ClInclude Include="Gamestore.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Administrator\Administrator.vcxproj">
+      <Project>{d019867b-4c29-4724-b6f1-f3a8ea42beef}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Client\Client.vcxproj">
       <Project>{fa9a9f27-ad95-4f50-a315-7bf3c32f3574}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Game\Game.vcxproj">
       <Project>{a46c2579-56c6-4a02-81e1-0a2c9a60e474}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TVector\TVector.vcxproj">
+      <Project>{5cc51f52-6e18-41cb-98ae-6eab8d112509}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

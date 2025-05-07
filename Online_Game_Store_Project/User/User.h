@@ -3,9 +3,12 @@
 #ifndef ONLINE_GAME_STORE_PROJECT_USER_USER_H_
 #define ONLINE_GAME_STORE_PROJECT_USER_USER_H_
 
+#include <string>
+
 class User {
-    char* _login;
-    char* _password;
+ protected:
+  std::string _login;
+  std::string _password;
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_USER_USER_H_

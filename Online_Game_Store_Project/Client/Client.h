@@ -3,15 +3,16 @@
 #ifndef ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_
 #define ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_
 
+#include "my_vector.h"  // NOLINT(build/include_subdir)
 #include "User.h"
 
 class Game;
 
-class Client :public User {
+class Client : public User {
     int _balance;
-    Game** _my_purchases;
-    Game** _desired;
-    Game** _basket;
+    TVector<Game*> _my_purchases;
+    TVector<Game*> _desired;
+    TVector<Game*> _basket;
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_

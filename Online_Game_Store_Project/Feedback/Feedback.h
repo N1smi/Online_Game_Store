@@ -3,11 +3,13 @@
 #ifndef ONLINE_GAME_STORE_PROJECT_FEEDBACK_FEEDBACK_H_
 #define ONLINE_GAME_STORE_PROJECT_FEEDBACK_FEEDBACK_H_
 
+#include <string>
+
 class Client;
 
 class Feedback {
     Client* _client;
-    char* _text;
+    std::string _text;
     int _assessment;
 };
 

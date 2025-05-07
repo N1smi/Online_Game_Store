@@ -5,7 +5,7 @@
 
 #include "User.h"
 
-class Administrator:public User {
+class Administrator : public User {
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_ADMINISTRATOR_ADMINISTRATOR_H_

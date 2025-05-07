@@ -104,14 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,6 +137,9 @@
     <ClInclude Include="Client.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TVector\TVector.vcxproj">
+      <Project>{5cc51f52-6e18-41cb-98ae-6eab8d112509}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\User\User.vcxproj">
       <Project>{2061c0f7-ca8d-4d54-870f-70aaf39cd688}</Project>
     </ProjectReference>
