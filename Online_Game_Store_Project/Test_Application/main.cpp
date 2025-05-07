@@ -2,7 +2,8 @@
 
 #include <windows.h>
 #include <iostream>
-#include "my_vector.h"
+#include <string>
+#include "E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector\my_vector.h"
 #include "User.h"
 #include "Administrator.h"
 #include "Client.h"
@@ -400,19 +401,19 @@ bool test_19_pop_front() {
   TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
       16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 });
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   vec_1.pop_front();
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   for (size_t i = 0; i < 4; i++) {
     vec_1.pop_front();
 
-     // print_vect(vec_1);
-     // print_stat(vec_1);
+    // print_vect(vec_1);
+    // print_stat(vec_1);
   }
   bool result = (TestSystem::check(static_cast<size_t>(25), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(30), vec_1.capacity()))
@@ -634,7 +635,7 @@ bool test_26_pop_back_with_pop_front() {
 bool test_27_delete_all_and_push_or_insert() {
   TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
      16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 });
-  
+
   for (size_t i = 0; i < 30; i++) {
     vec_1.pop_back();
 
@@ -845,7 +846,7 @@ bool test_31_erase() {
   // print_vect(vec_1);
   // print_stat(vec_1);
   // std::cout << vec_1.size() << std::endl;
-  
+
   bool result = (TestSystem::check(static_cast<size_t>(17), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(30), vec_1.capacity()))
     && (TestSystem::check(3, vec_1[1]))
@@ -989,15 +990,15 @@ bool test_37_insert_whith_count_whithout_deleted() {
   TVector<int> vec_1;
   vec_1.insert(0, 50, 2);
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
-   // std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.insert(25, 3, 5);
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
-   // std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   bool result = (TestSystem::check(static_cast<size_t>(53), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
@@ -1010,7 +1011,7 @@ bool test_37_insert_whith_count_whithout_deleted() {
 bool test_38_insert_whith_zero_count() {
   TVector<int> vec_1(90);
   vec_1.insert(2, 0, 2);
-  
+
   // print_vect(vec_1);
   // print_stat(vec_1);
   // std::cout << vec_1.size() << std::endl;
@@ -1133,15 +1134,15 @@ bool test_44_erase_whith_pointers() {
     vec_1.insert(i, i + 1);
   }
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
-   // std::cout << vec_1.size() << std::endl;
-  
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
+
   vec_1.erase(vec_1.begin() + 1, vec_1.begin() + 8);
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
-   // std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   bool result = (TestSystem::check(static_cast<size_t>(43), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
@@ -1156,21 +1157,23 @@ bool test_45_erase_whith_pointers_and_deleted() {
   for (size_t i = 0; i < 50; i++) {
     vec_1.insert(i, i + 1);
   }
-    // print_vect(vec_1);
-    // print_stat(vec_1);
-    // std::cout << vec_1.size() << std::endl;
+
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
 
   vec_1.erase(1);
-    // print_vect(vec_1);
-    // print_stat(vec_1);
-    // std::cout << vec_1.size() << std::endl;
+
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   vec_1.erase(vec_1.begin() + 1, vec_1.begin() + 7);
 
-    // print_vect(vec_1);
-    // print_stat(vec_1);
-    // std::cout << vec_1.size() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << std::endl;
 
   bool result = (TestSystem::check(static_cast<size_t>(43), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(60), vec_1.capacity()))
@@ -1429,17 +1432,17 @@ bool test_57_reserve() {
   vec_1.reserve(5);
   bool check1 = (TestSystem::check(static_cast<size_t>(10), vec_1.capacity()));
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
-   // std::cout << vec_1.size() << ' ' << vec_1.capacity() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << ' ' << vec_1.capacity() << std::endl;
 
   vec_1.reserve(100);
   bool check2 = (TestSystem::check(static_cast<size_t>(100), vec_1.capacity()))
     && (TestSystem::check(static_cast<size_t>(10), vec_1.size()));
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
-   // std::cout << vec_1.size() << ' ' << vec_1.capacity() << std::endl;
+  // print_vect(vec_1);
+  // print_stat(vec_1);
+  // std::cout << vec_1.size() << ' ' << vec_1.capacity() << std::endl;
 
   bool elements_ok = true;
   for (int i = 0; i < 10; ++i) {
@@ -1460,26 +1463,26 @@ bool test_58_resize() {
     vec[i] = static_cast<int>(i);
   }
 
-   // print_vect(vec);
-   // print_stat(vec);
-   // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
 
   vec.resize(5);
   bool check1 = (TestSystem::check(static_cast<size_t>(5), vec.size())) &&
     (TestSystem::check(4, vec.back()));
 
-   // print_vect(vec);
-   // print_stat(vec);
-   // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
 
   vec.resize(8);
   bool check2 = (TestSystem::check(static_cast<size_t>(8), vec.size())) &&
     (TestSystem::check(0, vec[6])) &&
       (TestSystem::check(static_cast<int>(4), vec[4]));
 
-   // print_vect(vec);
-   // print_stat(vec);
-   // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+  // print_vect(vec);
+  // print_stat(vec);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
 
   return check1 && check2;
 }
@@ -1512,9 +1515,9 @@ bool test_59_resize_with_deleted() {
   // print_stat(vec);
   // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
 
-  vec.resize(16,777);
+  vec.resize(16, 777);
   bool check2 = (TestSystem::check(static_cast<size_t>(16), vec.size())) &&
-    (TestSystem::check(static_cast<int>(4), vec[2])) 
+    (TestSystem::check(static_cast<int>(4), vec[2]))
     && (TestSystem::check(static_cast<int>(777), vec[15]))
     && (TestSystem::check(static_cast<size_t>(16), vec.capacity()));
 
@@ -1567,25 +1570,28 @@ bool test_61_shrink_to_fit() {
 
   vec.push_front(333);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   vec.erase(0, 5);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   vec.shrink_to_fit();
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   bool check1 = (TestSystem::check(static_cast<size_t>(46), vec.size()))
     && (TestSystem::check(static_cast<size_t>(46), vec.capacity()));
 
   TVector<int> empty_vec;
+
   empty_vec.shrink_to_fit();
-  bool check2 = (TestSystem::check(static_cast<size_t>(0), empty_vec.capacity()));
+
+  bool check2 = (TestSystem::check(static_cast<size_t>(0),
+    empty_vec.capacity()));
 
   return check1 && check2;
 }
@@ -1614,21 +1620,21 @@ bool test_62_assign() {
 bool test_63_assign_with_deleted() {
   TVector<int> vec(100);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   vec.erase(3, 7);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   vec.assign(8, 100);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   return TestSystem::check(static_cast<size_t>(8), vec.size()) &&
-  TestSystem::check(100, vec[7]) 
+  TestSystem::check(100, vec[7])
     && TestSystem::check(static_cast<size_t>(100), vec.capacity());
 }
 
@@ -1638,11 +1644,11 @@ bool test_64_assign_empty() {
   vec.assign(0, "test");
 
   return TestSystem::check(static_cast<size_t>(0), vec.size()) &&
-    TestSystem::check(true, vec.is_empty()) 
+    TestSystem::check(true, vec.is_empty())
     && TestSystem::check(static_cast<size_t>(5), vec.capacity());
 }
 
-bool test_65_operator_equally_basic(){
+bool test_65_operator_equally_basic() {
   TVector<int> v1(5);
   for (int i = 0; i < 5; i++) v1[i] = i + 1;
 
@@ -1727,10 +1733,10 @@ bool test_68_swap_basic() {
   // print_vect(vec);
   // print_stat(vec);
 
-  swap(vec[0], vec[2]);
+  T_swap(vec[0], vec[2]);
 
- // print_vect(vec);
- // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   bool check = (vec[0] == 30) && (vec[2] == 10) && (vec[1] == 20);
   return TestSystem::check(true, check);
@@ -1740,7 +1746,7 @@ bool test_69_swap_self() {
   TVector<int> vec(1);
   vec[0] = 42;
 
-  swap(vec[0], vec[0]);
+  T_swap(vec[0], vec[0]);
 
   return TestSystem::check(42, vec[0]) &&
     TestSystem::check(static_cast<size_t>(1), vec.size());
@@ -1751,7 +1757,7 @@ bool test_70_shuffle_basic() {
   for (int i = 0; i < 100; ++i) {
     vec_1[i] = i;
   }
-  
+
   TVector<int> vec_2(vec_1);
 
   shuffle(vec_1);
@@ -1807,11 +1813,11 @@ bool test_72_shuffle_with_deleted() {
 
   shuffle(vec_1);
 
-   // print_vect(vec_2);
-   // print_stat(vec_2);
+  // print_vect(vec_2);
+  // print_stat(vec_2);
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   bool size_ok = TestSystem::check(vec_2.size(), vec_1.size());
 
@@ -1827,9 +1833,11 @@ bool test_72_shuffle_with_deleted() {
 }
 
 bool test_73_find_first() {
+  int* ptr_null = nullptr;
+
   TVector<int> empty_vec;
   int* ptr_1 = find_first(empty_vec, 42);
-  bool check_1  = TestSystem::check((int*)nullptr, ptr_1);
+  bool check_1  = TestSystem::check(ptr_null, ptr_1);
 
   TVector<int> vec(30);
   for (int i = 0; i < 30; i++) vec[i] = i;
@@ -1838,11 +1846,11 @@ bool test_73_find_first() {
 
   vec.erase(3);
   int* ptr_3 = find_first(vec, 3);
-  bool check_3 = TestSystem::check((int*)nullptr, ptr_3);
+  bool check_3 = TestSystem::check(ptr_null, ptr_3);
 
 
   int* ptr_4 = find_first(vec, 99);
-  bool check_4 = TestSystem::check((int*)nullptr, ptr_4);
+  bool check_4 = TestSystem::check(ptr_null, ptr_4);
 
   vec.push_back(0);
 
@@ -1853,9 +1861,11 @@ bool test_73_find_first() {
 }
 
 bool test_74_find_last() {
+  int* ptr_null = nullptr;
+
   TVector<int> empty_vec;
   int* ptr_1 = find_last(empty_vec, 42);
-  bool check_1 = TestSystem::check((int*)nullptr, ptr_1);
+  bool check_1 = TestSystem::check(ptr_null, ptr_1);
 
   TVector<int> vec(30);
   for (int i = 0; i < 30; i++) vec[i] = i;
@@ -1864,11 +1874,11 @@ bool test_74_find_last() {
 
   vec.erase(3);
   int* ptr_3 = find_last(vec, 3);
-  bool check_3 = TestSystem::check((int*)nullptr, ptr_3);
+  bool check_3 = TestSystem::check(ptr_null, ptr_3);
 
 
   int* ptr_4 = find_last(vec, 99);
-  bool check_4 = TestSystem::check((int*)nullptr, ptr_4);
+  bool check_4 = TestSystem::check(ptr_null, ptr_4);
 
   vec.push_back(0);
 
@@ -1888,10 +1898,6 @@ bool test_75_find() {
   for (int i = 20; i < 30; i++) vec[i] = 44;
   TVector<int*> ptr_2 = find(vec, 44);
   bool check_2 = TestSystem::check(static_cast<size_t>(10), ptr_2.size());
-   for (size_t i = 0; i < ptr_2.size(); i++) {
-     
-   }
-
 
   vec.erase(3);
   TVector<int*> ptr_3 = find(vec, 3);
@@ -1910,7 +1916,8 @@ bool test_75_find() {
   vec.push_back(0);
 
   TVector<int*> ptr_5 = find(vec, 0);
-  bool check_5 = TestSystem::check(&vec[0], ptr_5[0]) && TestSystem::check(&vec[29], ptr_5[1]);
+  bool check_5 = TestSystem::check(&vec[0], ptr_5[0])
+    && TestSystem::check(&vec[29], ptr_5[1]);
 
   return check_1 && check_2 && check_3 && check_4 && check_5;
 }
@@ -1923,18 +1930,18 @@ bool test_76_sort() {
 
   vec.push_front(0);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   vec.erase(0);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
-  sort(vec);
+  T_sort(vec);
 
-   // print_vect(vec);
-   // print_stat(vec);
+  // print_vect(vec);
+  // print_stat(vec);
 
   bool check_1 = true;
   for (size_t i = 1; i < vec.size(); i++) {
@@ -1945,12 +1952,13 @@ bool test_76_sort() {
   }
 
   TVector<int> empty;
-  sort(empty);
+  T_sort(empty);
   bool check_2 = empty.is_empty();
 
   TVector<int> single = { 1 };
-  sort(single);
-  bool check_3 = TestSystem::check(static_cast<size_t>(1), single.size()) && TestSystem::check(1, single.back());
+  T_sort(single);
+  bool check_3 = TestSystem::check(static_cast<size_t>(1), single.size())
+    && TestSystem::check(1, single.back());
 
   return check_1 && check_2 && check_3;
 }

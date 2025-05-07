@@ -75,13 +75,13 @@ class TVector {
   void defragment();
 
   template<typename T>
-  friend void swap(T& first_elem, T& second_elem);
+  friend void T_swap(T& first_elem, T& second_elem);
 
   template<typename T>
   friend void shuffle(TVector<T>& vec);
 
   template<typename T>
-  friend void sort(TVector<T>& vec);
+  friend void T_sort(TVector<T>& vec);
 
   template<typename T>
   friend T* find_first(TVector<T>& vec, const T& value);
@@ -595,7 +595,6 @@ void TVector<T>::resize(size_t new_size, const T& value) {
     }
     _size = new_size;
   }
-
 }
 
 template<class T>
@@ -639,7 +638,6 @@ bool TVector<T>::operator==(const TVector<T>& other) const {
   size_t busy_count = 0;
 
   while (busy_count < _size) {
-
     while (phys_pos1 < _capacity && _states[phys_pos1] != busy) {
       ++phys_pos1;
     }
@@ -695,11 +693,10 @@ void TVector<T>::defragment() {
   copy_busy_elements(new_data, new_states, _size + _deleted);
 
   replace_arrays(new_data, new_states, new_capacity);
-  
 }
 
 template<class T>
-void swap(T& first_elem, T& second_elem) {
+void T_swap(T& first_elem, T& second_elem) {
   if (first_elem == second_elem) {
     return;
   }
@@ -721,7 +718,7 @@ void shuffle(TVector<T>& vec) {
   for (size_t i = 0; i < vec.size(); i++) {
       std::uniform_int_distribution<size_t> dist(0, i);
       size_t rand_i = dist(gen);
-      swap(vec[i], vec[rand_i]);
+      T_swap(vec[i], vec[rand_i]);
   }
 }
 
@@ -731,8 +728,7 @@ T median_of_three(T a, T b, T c) {
     if (b < c) return b;
     else if (a < c) return c;
     else return a;
-  }
-  else {
+  } else {
     if (a < c) return a;
     else if (b < c) return c;
     else return b;
@@ -768,7 +764,7 @@ void hoar_sort_rec(TVector<T>& vec, size_t  l, size_t  r) {
 
     if (i <= j) {
       if (i < j) {
-        swap(vec[i], vec[j]);
+        T_swap(vec[i], vec[j]);
       }
       i++;
       j--;
@@ -780,7 +776,7 @@ void hoar_sort_rec(TVector<T>& vec, size_t  l, size_t  r) {
 }
 
 template<class T>
-void sort(TVector<T>& vec) {
+void T_sort(TVector<T>& vec) {
   if (vec.size() <= 1) {
     return;
   }
@@ -893,7 +889,8 @@ void TVector<T>::reallocate_for_deleted() {
 }
 
 template<class T>
-void TVector<T>::create_new_arrays(size_t new_capacity, T*& new_data, State*& new_states) {
+void TVector<T>::create_new_arrays
+(size_t new_capacity, T*& new_data, State*& new_states) {
   new_data = new T[new_capacity];
   new_states = new State[new_capacity];
 
@@ -903,7 +900,8 @@ void TVector<T>::create_new_arrays(size_t new_capacity, T*& new_data, State*& ne
 }
 
 template<class T>
-void TVector<T>::copy_busy_elements(T* new_data, State* new_states, size_t limit) {
+void TVector<T>::copy_busy_elements
+(T* new_data, State* new_states, size_t limit) {
   size_t busy_count = 0;
   for (size_t i = 0; i < limit; i++) {
     if (_states[i] == busy) {
@@ -915,7 +913,8 @@ void TVector<T>::copy_busy_elements(T* new_data, State* new_states, size_t limit
 }
 
 template<class T>
-void TVector<T>::replace_arrays(T* new_data, State* new_states, size_t new_capacity) {
+void TVector<T>::replace_arrays
+(T* new_data, State* new_states, size_t new_capacity) {
   delete[] _data;
   delete[] _states;
 
