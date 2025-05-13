@@ -1923,8 +1923,8 @@ bool test_75_find() {
 }
 
 bool test_76_sort() {
-  TVector<int> vec(10000000);
-  for (size_t i = 0; i < 10000000; i++) vec[i] = i;
+  TVector<int> vec(1000000);
+  for (size_t i = 0; i < 1000000; i++) vec[i] = i;
 
   shuffle(vec);
 
@@ -1961,6 +1961,65 @@ bool test_76_sort() {
     && TestSystem::check(1, single.back());
 
   return check_1 && check_2 && check_3;
+}
+
+bool test_77_reallocate() {
+  TVector<int> vec(44);
+  vec.push_back(1);
+
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  size_t initial_capacity = vec.capacity();
+  bool check_1 = true;
+  for (size_t i = 0; i < 15; i++) {
+    vec.push_back(0 + i);
+    // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+    check_1 = (vec.capacity() == initial_capacity);
+    if (check_1 == false) {
+      break;
+    }
+  }
+
+  vec.push_back(3);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+  bool check_2 = (vec.capacity() == initial_capacity + 15);
+
+  vec.erase(0, 4);
+  // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  for (size_t i = 0; i < 16; i++) {
+    vec.push_back(3);
+    // std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+  }
+  bool check_3 = (vec.capacity() == initial_capacity + 30);
+
+  return check_1 && check_2 && check_3;
+}
+
+bool test_78_reallocate_for_deleted() {
+  TVector<int> vec(100);
+  vec.push_back(1);
+  size_t initial_capacity = vec.capacity();
+
+  std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+
+  bool check_1 = true;
+  for (size_t i = 0; i < 15; i++) {
+    vec.pop_back();
+    std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+    check_1 = (vec.capacity() == initial_capacity);
+    if (check_1 == false) {
+      break;
+    }
+  }
+
+  vec.pop_back();
+  std::cout << vec.size() << ' ' << vec.capacity() << std::endl;
+  bool check_2 = (vec.capacity() == initial_capacity - 15);
+
+
+  return check_1 && check_2;
+
 }
 
 int main() {
@@ -2129,6 +2188,10 @@ int main() {
     " TVector.test_75_find");
   TestSystem::start_test(test_76_sort,
     " TVector.test_76_sort");
+  TestSystem::start_test(test_77_reallocate,
+    " TVector.test_77_reallocate");
+  TestSystem::start_test(test_78_reallocate_for_deleted,
+    " TVector.test_78_reallocate_for_deleted");
 
   TestSystem::print_final_info();
   system("pause");

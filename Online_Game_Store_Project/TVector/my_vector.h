@@ -72,8 +72,6 @@ class TVector {
   const T& operator[](size_t pos) const;
   T& operator[](size_t pos);
 
-  void defragment();
-
   template<typename T>
   friend void T_swap(T& first_elem, T& second_elem);
 
@@ -93,6 +91,7 @@ class TVector {
   friend TVector<T*> find(TVector<T>& vec, const T& value);
 
  private:
+  void defragment();
   size_t real_pos(size_t pos);
   T* real_address(size_t pos);
   inline bool is_full() const noexcept;
