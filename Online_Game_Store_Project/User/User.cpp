@@ -1,5 +1,31 @@
 // Copyright 2025 Smirnov Nikita
 
+#include <stdexcept>
 #include "User.h"
 
+User::User(const std::string& login, const std::string& password) {
+  set_login(login);
+  set_password(password);
+}
+
+const std::string& User::get_login() const { return _login; }
+const std::string& User::get_password() const { return _password; }
+
+void User::set_login(const std::string& login) {
+  if (login.length() < 3 || login.length() > 32) {
+    throw std::invalid_argument("Login must be between 3 and 32 characters");
+  }
+  _login = login;
+}
+
+void User::set_password(const std::string& password) {
+  if (password.length() < 8 || password.length() > 32) {
+    throw std::invalid_argument("Password must be between 8 and 32 characters");
+  }
+  _password = password;
+}
+
+bool User::check_password(const std::string& input_password) const {
+  return _password == input_password;
+}
 

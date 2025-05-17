@@ -10,14 +10,17 @@ class User {
   std::string _login;
   std::string _password;
  public:
-  // User(const std::string& login, const std::string& password);
+   User(const std::string& login = "LoginExample",
+     const std::string& password = "PasswordExample");
 
-  // const std::string& get_login() const;
-  // const std::string& get_password() const;
+   const std::string& get_login() const;
+   const std::string& get_password() const;
 
-  // void set_password(const std::string& newPassword);
+   void set_login(const std::string& login);
 
-  // bool check_password(const std::string& inputPassword) const;
+   void set_password(const std::string& password);
+
+   bool check_password(const std::string& input_password) const;
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_USER_USER_H_

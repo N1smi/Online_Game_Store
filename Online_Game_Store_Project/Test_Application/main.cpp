@@ -7,10 +7,10 @@
 #include "User.h"
 #include "Administrator.h"
 #include "Client.h"
+#include "Date.h"
 #include "Game.h"
 #include "Feedback.h"
 #include "Gamestore.h"
-#include "Date.h"
 
 void set_color(int text_color, int bg_color) {
   HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

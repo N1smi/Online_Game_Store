@@ -41,7 +41,7 @@ class Date {
 
    friend std::istream& operator>>(std::istream& is, Date& date);
 
-private:
+ private:
   int daysInMonth(int m) const;
   bool isValidDate(int d, int m, int y) const;
   static void parseDateString(const std::string& dateStr, int& d,
