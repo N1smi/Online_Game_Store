@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Administrator", "Administra
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TVector", "TVector\TVector.vcxproj", "{5CC51F52-6E18-41CB-98AE-6EAB8D112509}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Date", "Date\Date.vcxproj", "{7634348B-B0E5-4E16-85AA-7A06843FB824}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{5CC51F52-6E18-41CB-98AE-6EAB8D112509}.Release|x64.Build.0 = Release|x64
 		{5CC51F52-6E18-41CB-98AE-6EAB8D112509}.Release|x86.ActiveCfg = Release|Win32
 		{5CC51F52-6E18-41CB-98AE-6EAB8D112509}.Release|x86.Build.0 = Release|Win32
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Debug|x64.ActiveCfg = Debug|x64
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Debug|x64.Build.0 = Debug|x64
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Debug|x86.ActiveCfg = Debug|Win32
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Debug|x86.Build.0 = Debug|Win32
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Release|x64.ActiveCfg = Release|x64
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Release|x64.Build.0 = Release|x64
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Release|x86.ActiveCfg = Release|Win32
+		{7634348B-B0E5-4E16-85AA-7A06843FB824}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

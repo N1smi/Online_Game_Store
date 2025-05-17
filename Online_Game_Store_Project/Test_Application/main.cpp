@@ -10,6 +10,7 @@
 #include "Game.h"
 #include "Feedback.h"
 #include "Gamestore.h"
+#include "Date.h"
 
 void set_color(int text_color, int bg_color) {
   HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -407,19 +408,19 @@ bool test_19_pop_front() {
   TVector<int> vec_1({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
       16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 });
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   vec_1.pop_front();
 
-   // print_vect(vec_1);
-   // print_stat(vec_1);
+  // print_vect(vec_1);
+  // print_stat(vec_1);
 
   for (size_t i = 0; i < 4; i++) {
     vec_1.pop_front();
 
-     // print_vect(vec_1);
-     // print_stat(vec_1);
+    // print_vect(vec_1);
+    // print_stat(vec_1);
   }
 
   bool result = (TestSystem::check(static_cast<size_t>(25), vec_1.size()))
@@ -704,7 +705,7 @@ bool test_28_pop_back_with_push_front() {
       // print_stat(vec_1);
       // std::cout << vec_1.size() << std::endl;
   }
- 
+
   bool result = (TestSystem::check(static_cast<size_t>(30), vec_1.size()))
     && (TestSystem::check(static_cast<size_t>(30), vec_1.capacity()))
     && (TestSystem::check(999, vec_1[0]))
@@ -2000,6 +2001,116 @@ bool test_79_high_dimensional_and_reallocate_for_deleted() {
   return TestSystem::check(static_cast<size_t>(76515), vec.capacity());
 }
 
+bool test_1_create_default_date() {
+  Date d1;
+
+  return TestSystem::check(1, d1.getDay()) &&
+    TestSystem::check(1, d1.getMonth()) &&
+    TestSystem::check(1, d1.getYear());
+}
+
+bool test_2_create_date_with_initialization() {
+  Date d1(15, 6, 2023);
+
+  return TestSystem::check(15, d1.getDay()) &&
+    TestSystem::check(6, d1.getMonth()) &&
+    TestSystem::check(2023, d1.getYear());
+}
+
+bool test_3_create_date_with_convertor() {
+  Date d1("31.12.2024");
+
+  return TestSystem::check(31, d1.getDay()) &&
+    TestSystem::check(12, d1.getMonth()) &&
+    TestSystem::check(2024, d1.getYear());
+}
+
+bool test_4_throw_when_constructor_invalid() {
+  bool invalid1 = false;
+  try {
+    Date d(32, 1, 2023);
+  }
+  catch (const std::invalid_argument&) {
+    invalid1 = true;
+  }
+
+  bool invalid2 = false;
+  try {
+    Date d("30.13.2023");
+  }
+  catch (const std::invalid_argument&) {
+    invalid2 = true;
+  }
+
+  return TestSystem::check(true, invalid1) &&
+    TestSystem::check(true, invalid2);
+}
+
+bool test_5_setters() {
+  Date d(1, 1, 2000);
+  d.setDay(15);
+  d.setMonth(6);
+  d.setYear(2023);
+
+  bool check1 = TestSystem::check(15, d.getDay()) &&
+    TestSystem::check(6, d.getMonth()) &&
+    TestSystem::check(2023, d.getYear());
+
+  bool invalid = false;
+  try {
+    d.setDay(31);
+  }
+  catch (const std::invalid_argument&) {
+    invalid = true;
+  }
+
+  return check1 && TestSystem::check(true, invalid);
+}
+
+bool test_6_comparison() {
+  Date d1(15, 6, 2023);
+  Date d2(20, 6, 2023);
+  Date d3(15, 6, 2023);
+
+  bool check1 = TestSystem::check(true, d1 < d2) &&
+    TestSystem::check(false, d1 > d2) &&
+    TestSystem::check(true, d1 == d3) &&
+    TestSystem::check(false, d1 != d3);
+
+  return check1;
+}
+
+bool test_7_string_conversion() {
+  Date d(9, 11, 2023);
+  std::string s = d.toString();
+  bool check1 = TestSystem::check(std::string("09.11.2023"), s);
+
+  Date d2("01.01.2000");
+  bool check2 = TestSystem::check(std::string("01.01.2000"), d2.toString());
+
+  return check1 && check2;
+}
+
+bool test_8_throw_when_invalid_string_format() {
+  std::vector<std::string> test_cases = {
+      "", "1.1.2023", "01-01-2023", "01.01.23",
+      "32.01.2023", "01.13.2023", "01.01.-2023",
+      "01.01.2023extra", "abc.01.2023", "01.abc.2023"
+  };
+
+  for (const auto& date_str : test_cases) {
+    bool thrown = false;
+    try {
+      Date d(date_str);
+    }
+    catch (const std::invalid_argument&) {
+      thrown = true;
+    }
+    if (!thrown) return false;
+  }
+  return true;
+}
+
 int main() {
   User user_1;
   Client client_1;
@@ -2007,6 +2118,10 @@ int main() {
   Game game_1;
   Feedback feedback_1;
   GameStore gamestore_1;
+
+  set_color(6, 0);
+  std::cout << "TVector class test" << std::endl;
+  set_color(7, 0);
 
   TestSystem::start_test(test_1_create_default_vector,
     " TVector.test_1_create_default_vector");
@@ -2174,6 +2289,35 @@ int main() {
     " TVector.test_79_high_dimensional_and_reallocate_for_deleted");
 
   TestSystem::print_final_info();
+  TestSystem::count_success = 0;
+  TestSystem::count_failed = 0;
+  std::cout << std::endl;
+
+  set_color(6, 0);
+  std::cout << "Date class test" << std::endl;
+  set_color(7, 0);
+
+  TestSystem::start_test(test_1_create_default_date,
+    " Date.test_1_create_default_date");
+  TestSystem::start_test(test_2_create_date_with_initialization,
+    " Date.test_2_create_date_with_initialization");
+  TestSystem::start_test(test_3_create_date_with_convertor,
+    " Date.test_3_create_date_with_convertor");
+  TestSystem::start_test(test_4_throw_when_constructor_invalid,
+    " Date.test_4_throw_when_constructor_invalid");
+  TestSystem::start_test(test_5_setters,
+    " Date.test_5_setters");
+  TestSystem::start_test(test_6_comparison,
+    " Date.test_6_comparison");
+  TestSystem::start_test(test_7_string_conversion,
+    " Date.test_7_string_conversion");
+  TestSystem::start_test(test_8_throw_when_invalid_string_format,
+    " Date.test_8_throw_when_invalid_string_format");
+
+  TestSystem::print_final_info();
+  TestSystem::count_success = 0;
+  TestSystem::count_failed = 0;
+  std::cout << std::endl;
   system("pause");
   return 0;
 }

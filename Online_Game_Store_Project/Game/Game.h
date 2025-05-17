@@ -5,13 +5,18 @@
 
 #include <string>
 #include "my_vector.h"  // NOLINT(build/include_subdir)
+#include "Date.h"
 
 class Feedback;
 
+enum GenreType { Shooter, Battle_Royale, Role_Play, Strategy,
+  Simulator, Horror, Races, Casual, Adventures, Survival,
+  Sandbox, Action, RPG, Open_World};
+
 class Game {
   std::string _title;
-  std::string _genre;
-  std::string _release_date;
+  GenreType _genre;
+  Date _release_date;
   std::string _developer;
   std::string _description;
   int _price;

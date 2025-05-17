@@ -5,13 +5,11 @@
 
 #include "my_vector.h"  // NOLINT(build/include_subdir)
 
-class Client;
-class Administrator;
+class User;
 class Game;
 
 class GameStore {
-  TVector<Client> _clients;
-  TVector<Administrator> _administrators;
+  TVector<User> _users;
   TVector<Game> _games;
 };
 

@@ -104,12 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Gamestore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Gamestore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Gamestore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Gamestore;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,6 +137,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Client\Client.vcxproj">
       <Project>{fa9a9f27-ad95-4f50-a315-7bf3c32f3574}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Date\Date.vcxproj">
+      <Project>{7634348b-b0e5-4e16-85aa-7a06843fb824}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Feedback\Feedback.vcxproj">
       <Project>{b16a8bf4-a770-44f3-a40a-7a77286943a5}</Project>
