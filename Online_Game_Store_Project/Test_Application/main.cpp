@@ -2111,6 +2111,35 @@ bool test_8_throw_when_invalid_string_format() {
   return true;
 }
 
+bool test_1_csv_tables_saving() {
+  GameStore Store;
+  User new_user1("Yes123","qwerty1234");
+  User new_user2("No123", "qwerty1234");
+  Store.add_user(new_user1);
+  Store.add_user(new_user2);
+  bool check_1 = Store.save_users
+  ("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Users.csv");
+  return check_1;
+}
+
+bool test_2_csv_tables_reading() {
+  GameStore Store;
+  bool check_1 = Store.load_users
+  ("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Users.csv");
+  // Store.print_users();
+  return check_1;
+}
+
+bool test_3_csv_tables_save_1_user() {
+  GameStore Store;
+  User new_user("Oh???", "qwedfasarrr");
+  Store.add_user(new_user);
+  bool check_1 = Store.save_user
+  ("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Users.csv",
+    new_user);
+  return check_1;
+}
+
 int main() {
   User user_1;
   Client client_1;
@@ -2318,6 +2347,23 @@ int main() {
   TestSystem::count_success = 0;
   TestSystem::count_failed = 0;
   std::cout << std::endl;
+
+  set_color(6, 0);
+  std::cout << "Csv tables test" << std::endl;
+  set_color(7, 0);
+
+  TestSystem::start_test(test_1_csv_tables_saving,
+    " Csv.test_1_csv_tables_saving");
+  TestSystem::start_test(test_2_csv_tables_reading,
+    " Csv.test_2_csv_tables_reading");
+  TestSystem::start_test(test_3_csv_tables_save_1_user,
+    " Csv.test_3_csv_tables_save_1_user");
+
+  TestSystem::print_final_info();
+  TestSystem::count_success = 0;
+  TestSystem::count_failed = 0;
+  std::cout << std::endl;
+
   system("pause");
   return 0;
 }
