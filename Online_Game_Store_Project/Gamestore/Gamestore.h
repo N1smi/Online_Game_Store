@@ -3,15 +3,17 @@
 #ifndef ONLINE_GAME_STORE_PROJECT_GAMESTORE_GAMESTORE_H_
 #define ONLINE_GAME_STORE_PROJECT_GAMESTORE_GAMESTORE_H_
 
-#include "my_vector.h"  // NOLINT(build/include_subdir)
 #include "User.h"
+#include "my_vector.h"  // NOLINT(build/include_subdir)
 #include "Game.h"
 
 class GameStore {
   TVector<User> _users;
-  TVector<Game> _games;
+  //TVector<Game> _games;
 
 public:
+  GameStore();
+  ~GameStore();
   const User* find_user(const std::string& login) const;
 
   bool user_exists(const std::string& login) const;

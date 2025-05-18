@@ -2132,7 +2132,7 @@ bool test_2_csv_tables_reading() {
 
 bool test_3_csv_tables_save_1_user() {
   GameStore Store;
-  User new_user("Oh???", "qwedfasarrr");
+  User new_user("Ohea", "qwedfasarrr");
   Store.add_user(new_user);
   bool check_1 = Store.save_user
   ("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Users.csv",

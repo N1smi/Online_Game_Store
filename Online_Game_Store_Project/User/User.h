@@ -21,6 +21,8 @@ class User {
    void set_password(const std::string& password);
 
    bool check_password(const std::string& input_password) const;
+protected:
+   bool isAlphaNum(char ch);
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_USER_USER_H_

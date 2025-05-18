@@ -4,6 +4,12 @@
 #include <sstream>
 #include "Gamestore.h"
 
+GameStore::GameStore() : _users() {}
+
+GameStore::~GameStore() {
+
+}
+
 const User* GameStore::find_user(const std::string& login) const {
   for (size_t i = 0; i < _users.size(); i++) {
     if (_users[i].get_login() == login) {
