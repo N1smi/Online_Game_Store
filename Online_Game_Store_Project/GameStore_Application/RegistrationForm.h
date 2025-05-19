@@ -108,7 +108,7 @@ namespace GameStore_Application {
 			this->Label_Registration->AutoSize = true;
 			this->Label_Registration->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->Label_Registration->Location = System::Drawing::Point(146, 9);
+			this->Label_Registration->Location = System::Drawing::Point(148, 9);
 			this->Label_Registration->Name = L"Label_Registration";
 			this->Label_Registration->Size = System::Drawing::Size(179, 32);
 			this->Label_Registration->TabIndex = 2;
@@ -159,6 +159,7 @@ namespace GameStore_Application {
 			// 
 			// RegisterButton
 			// 
+			this->RegisterButton->AutoSize = true;
 			this->RegisterButton->BackColor = System::Drawing::SystemColors::Highlight;
 			this->RegisterButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16.2F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
@@ -175,7 +176,7 @@ namespace GameStore_Application {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(482, 407);
+			this->ClientSize = System::Drawing::Size(486, 410);
 			this->Controls->Add(this->RegisterButton);
 			this->Controls->Add(this->LabelConfirmPassword);
 			this->Controls->Add(this->TextBoxConfirmPassword);

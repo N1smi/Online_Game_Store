@@ -3,13 +3,15 @@
 #include <stdexcept>
 #include "User.h"
 
-User::User(const std::string& login, const std::string& password) {
+User::User(const std::string& login, const std::string& password, bool is_blocked) {
   set_login(login);
   set_password(password);
+  _is_blocked = is_blocked;
 }
 
 const std::string& User::get_login() const { return _login; }
 const std::string& User::get_password() const { return _password; }
+const bool User::get_block() const { return _is_blocked;  }
 
 void User::set_login(const std::string& login) {
   if (login.length() < 3 || login.length() > 32) {
@@ -38,6 +40,15 @@ void User::set_password(const std::string& password) {
 
 bool User::check_password(const std::string& input_password) const {
   return _password == input_password;
+}
+
+User& User::operator=(const User& other) {
+  if (this != &other) {
+    _login = other._login;
+    _password = other._password;
+    _is_blocked = other._is_blocked;
+  }
+  return *this;
 }
 
 bool User::isAlphaNum(char ch) {

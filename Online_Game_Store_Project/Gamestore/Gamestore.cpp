@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 #include "Gamestore.h"
 
 GameStore::GameStore() : _users() {}
@@ -53,11 +54,15 @@ bool GameStore::load_users(const std::string& filename) {
 
     std::stringstream ss(line);
     std::string login, password;
+    std::string str_is_blocked;
+    int is_blocked;
 
     std::getline(ss, login, ';');
-    std::getline(ss, password);
+    std::getline(ss, password, ';');
+    std::getline(ss, str_is_blocked);
+    is_blocked = std::stoi(str_is_blocked);
 
-    User user(login, password);
+    User user(login, password, is_blocked);
 
     _users.push_back(user);
   }
@@ -73,10 +78,10 @@ bool GameStore::save_users(const std::string& filename) const {
     return false;
   }
 
-  file << "# Логин;Пароль\n";
+  file << "# Логин;Пароль;Блокировка\n";
 
   for (size_t i = 0; i < _users.size(); i++) {
-    file << _users[i].get_login() << ";" << _users[i].get_password() << "\n";
+    file << _users[i].get_login() << ";" << _users[i].get_password() << ";" << _users[i].get_block() << "\n";
   }
 
   file.close();
@@ -93,7 +98,8 @@ bool GameStore::save_user(const std::string& filename, const User& new_user) con
   }
   
   file << new_user.get_login() << ";"
-    << new_user.get_password() << "\n";
+    << new_user.get_password() << ";"
+  << new_user.get_block() << "\n";
 
   file.close();
 
