@@ -2140,6 +2140,68 @@ bool test_3_csv_tables_save_1_user() {
   return check_1;
 }
 
+bool test_4_csv_tables_save_games() {
+  GameStore store;
+  TVector<Feedback> game_feedback;
+
+  Game game1("The Witcher 3: Wild Hunt", Role_Play, Date(19, 5, 2015), "CD Projekt Red", "Open world RPG with rich story", 2999, 0 , game_feedback);
+  Game game2("Cyberpunk 2077", RPG, Date(10, 12, 2020), "CD Projekt Red", "Futuristic open world RPG", 3999,0, game_feedback);
+
+  Feedback my_feedback_1("Tester1", "I love it baby", 5);
+  Feedback my_feedback_2("Tester2", "FUUUUUU", 1);
+  game1.addFeedback(my_feedback_1);
+  game1.addFeedback(my_feedback_2);
+  game2.addFeedback(my_feedback_2);
+  // Добавляем игры в магазин
+  store.add_game(game1);
+  store.add_game(game2);
+
+  bool check_1 = store.save_games("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Games.csv");
+  return check_1;
+}
+
+bool test_5_csv_tables_save_1_game() {
+  GameStore store;
+  TVector<Feedback> game_feedback;
+
+  Game game4("Hades", Action, Date(17, 9, 2020), "Supergiant Games", "Roguelike dungeon crawler", 2499, 0, game_feedback);
+  Feedback my_feedback_1("Tester1", "50/50", 3);
+  game4.addFeedback(my_feedback_1);
+  store.add_game(game4);
+
+
+  bool check_1 = store.save_game("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Games.csv", game4);
+  return check_1;
+}
+
+bool test_6_csv_tables_load_games() {
+  GameStore store;
+  bool check_1 = store.load_games("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Test_Application\\Test_Games.csv");
+  //for (size_t i = 0; i < store.get_all_games_ref().size(); ++i) {
+  //  const Game& g = store.get_all_games_ref()[i];
+  //  std::cout << "Title: " << g.get_title() << "\n"
+  //    << "Genre: " << g.get_genre() << "\n"
+  //    << "Release Date: " << g.get_release_date() << "\n"
+  //    << "Developer: " << g.get_developer() << "\n"
+  //    << "Description: " << g.get_description() << "\n"
+  //    << "Price: " << g.get_price() << "\n"
+  //    << "Rating: " << g.get_rating() << "\n"
+  //    << "Feedbacks (" << g.get_feedbacks().size() << "):\n";
+
+  //  // Вывод отзывов
+  //  const auto& feedbacks = g.get_feedbacks();
+  //  for (size_t j = 0; j < feedbacks.size(); ++j) {
+  //    const auto& feedback = feedbacks[j];
+  //    std::cout << "  Feedback " << j + 1 << ":\n"
+  //      << "    Client: " << feedback.get_client_login() << "\n"
+  //      << "    Text: " << feedback.get_text() << "\n"
+  //      << "    Assessment: " << feedback.get_assessment() << "\n";
+  //  }
+  //  std::cout << "-----------------------------------\n";
+  //}
+  return check_1;
+}
+
 int main() {
   User user_1;
   Client client_1;
@@ -2358,6 +2420,13 @@ int main() {
     " Csv.test_2_csv_tables_reading");
   TestSystem::start_test(test_3_csv_tables_save_1_user,
     " Csv.test_3_csv_tables_save_1_user");
+  TestSystem::start_test(test_4_csv_tables_save_games,
+    " Csv.test_4_csv_tables_save_games");
+  TestSystem::start_test(test_5_csv_tables_save_1_game,
+    " Csv.test_5_csv_tables_save_1_game");
+  TestSystem::start_test(test_6_csv_tables_load_games,
+    " Csv.test_6_csv_tables_load_games");
+
 
   TestSystem::print_final_info();
   TestSystem::count_success = 0;

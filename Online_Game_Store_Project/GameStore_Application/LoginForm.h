@@ -26,6 +26,7 @@ namespace CppCLRWinFormsProject {
 		{
 			MyGameStore = new GameStore();
 			(*MyGameStore).load_users("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Users.csv");
+			(*MyGameStore).load_games("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Games.csv");
 			InitializeComponent();
 		
 			//TODO: Add the constructor code here
@@ -236,7 +237,7 @@ private: System::Void SignInButton_Click(System::Object^ sender, System::EventAr
 			if (login == "Admin") {
 
 			} else {
-				GameStore_Application::MainClientForm^ clientForm = gcnew GameStore_Application::MainClientForm();
+				GameStore_Application::MainClientForm^ clientForm = gcnew GameStore_Application::MainClientForm( MyGameStore);
 				clientForm->Owner = this;
 				clientForm->Show();
 				this->Hide();

@@ -15,8 +15,10 @@ namespace GameStore_Application {
 	public ref class MainClientForm : public System::Windows::Forms::Form
 	{
 	public:
-		MainClientForm(void)
+		GameStore* MyGameStoreCopy;
+		MainClientForm(GameStore* MyGameStore)
 		{
+			MyGameStoreCopy = MyGameStore;
 			InitializeComponent();
 			//
 			//TODO: добавьте код конструктора

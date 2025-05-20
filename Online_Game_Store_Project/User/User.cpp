@@ -9,6 +9,12 @@ User::User(const std::string& login, const std::string& password, bool is_blocke
   _is_blocked = is_blocked;
 }
 
+User::User(const User& other)
+  : _login(other._login),
+  _password(other._password),
+  _is_blocked(other._is_blocked) {
+}
+
 const std::string& User::get_login() const { return _login; }
 const std::string& User::get_password() const { return _password; }
 const bool User::get_block() const { return _is_blocked;  }

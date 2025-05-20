@@ -9,22 +9,37 @@
 
 class GameStore {
   TVector<User> _users;
-  //TVector<Game> _games;
+  TVector<Game> _games;
 
 public:
   GameStore();
   ~GameStore();
+
+  const Game* find_game(const std::string& title) const;
+
   const User* find_user(const std::string& login) const;
+
+  bool game_exists(const std::string& title) const;
 
   bool user_exists(const std::string& login) const;
 
   bool add_user(const User& new_user);
 
+  bool add_game(const Game& new_game);
+
   const TVector<User>& get_all_users_ref() const;
+
+  const TVector<Game>& get_all_games_ref() const;
+
+  bool load_games(const std::string& filename);
 
   bool load_users(const std::string& filename);
 
+  bool save_games(const std::string& filename) const;
+
   bool save_users(const std::string& filename) const;
+
+  bool save_game(const std::string& filename, const Game& new_game) const;
 
   bool save_user(const std::string& filename, const User& new_user) const;
 

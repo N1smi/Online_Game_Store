@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -113,7 +113,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,6 +141,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Date\Date.vcxproj">
       <Project>{7634348b-b0e5-4e16-85aa-7a06843fb824}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Feedback\Feedback.vcxproj">
+      <Project>{b16a8bf4-a770-44f3-a40a-7a77286943a5}</Project>
     </ProjectReference>
     <ProjectReference Include="..\TVector\TVector.vcxproj">
       <Project>{5cc51f52-6e18-41cb-98ae-6eab8d112509}</Project>
