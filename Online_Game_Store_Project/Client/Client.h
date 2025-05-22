@@ -19,6 +19,8 @@ class Client : public User {
      TVector<std::string>& desired, TVector<std::string>& basket);
    Client(const Client& other);
    ~Client();
+
+   int get_balance() const;
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_

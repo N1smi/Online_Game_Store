@@ -33,28 +33,28 @@ public:
     const std::string& description,
     int price, float rating,
     const TVector<Feedback>& feedbacks);
+
+  Game(const Game& other);
+
   ~Game();
 
-  const std::string& get_title() const { return _title; }
-  GenreType get_genre() const { return _genre; }
-  const Date& get_release_date() const { return _release_date; }
-  const std::string& get_developer() const { return _developer; }
-  const std::string& get_description() const { return _description; }
-  int get_price() const { return _price; }
-  float get_rating() const { return _rating; }
-  const TVector<Feedback>& get_feedbacks() const { return _feedbacks; }
+  const std::string& get_title() const;
+  GenreType get_genre() const;
+  const Date& get_release_date() const;
+  const std::string& get_developer() const;
+  const std::string& get_description() const;
+  int get_price() const;
+  float get_rating() const;
+  const TVector<Feedback>& get_feedbacks() const;
 
-  void set_title(const std::string& title) { _title = title; }
-  void set_genre(GenreType genre) { _genre = genre; }
-  void set_release_date(const Date& date) { _release_date = date; }
-  void set_developer(const std::string& developer) { _developer = developer; }
-  void set_description(const std::string& description) { _description = description; }
-  void set_price(int price) { _price = price; }
+  void set_title(const std::string& title);
+  void set_genre(GenreType genre);
+  void set_release_date(const Date& date);
+  void set_developer(const std::string& developer);
+  void set_description(const std::string& description);
+  void set_price(int price);
 
-  void addFeedback(const Feedback& feedback) { _feedbacks.push_back(feedback);
-  _rating = calculateAverageRating();
-  }
-
+  void addFeedback(const Feedback& feedback);
  private:
   float calculateAverageRating() const;
 };

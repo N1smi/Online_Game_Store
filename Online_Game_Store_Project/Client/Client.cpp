@@ -24,3 +24,5 @@ Client::Client(const Client& other)
 
 Client::~Client() {
 }
+
+int Client::get_balance() const { return _balance; }
