@@ -6,6 +6,9 @@
 #include "User.h"
 
 class Administrator : public User {
+ public:
+   Administrator();
+   Administrator(const User& user);
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_ADMINISTRATOR_ADMINISTRATOR_H_

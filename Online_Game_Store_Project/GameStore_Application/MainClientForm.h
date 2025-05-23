@@ -35,12 +35,11 @@ namespace GameStore_Application {
 
 
   public:
-    Client* MyClient;
-    MainClientForm(GameStore* MyGameStore, const User MyUser)
+    const Client* MyClient;
+    MainClientForm(GameStore* MyGameStore,const Client* client)
     {
       MyGameStoreCopy = MyGameStore;
-      TVector<std::string> my_purchases, desired, basket;
-      MyClient = new Client(MyUser, 0, my_purchases, desired, basket);
+      MyClient = client;
       /* Тут нужна подгрузка данных пользователя и взаимодействие с csv*/
       InitializeComponent();
       //
@@ -89,13 +88,12 @@ namespace GameStore_Application {
       // 
       // menuStrip1
       // 
-      this->menuStrip1->AutoSize = false;
       this->menuStrip1->Dock = System::Windows::Forms::DockStyle::Right;
       this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
       this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->nameBalanceToolStripMenuItem });
-      this->menuStrip1->Location = System::Drawing::Point(1057, 0);
+      this->menuStrip1->Location = System::Drawing::Point(1024, 0);
       this->menuStrip1->Name = L"menuStrip1";
-      this->menuStrip1->Size = System::Drawing::Size(125, 653);
+      this->menuStrip1->Size = System::Drawing::Size(158, 653);
       this->menuStrip1->TabIndex = 0;
       this->menuStrip1->Text = L"menuStrip1";
       // 
@@ -106,26 +104,26 @@ namespace GameStore_Application {
           this->myWalletToolStripMenuItem, this->signOutOfAccountToolStripMenuItem
       });
       this->nameBalanceToolStripMenuItem->Name = L"nameBalanceToolStripMenuItem";
-      this->nameBalanceToolStripMenuItem->Size = System::Drawing::Size(118, 24);
+      this->nameBalanceToolStripMenuItem->Size = System::Drawing::Size(143, 24);
       this->nameBalanceToolStripMenuItem->Text = L"Name balance";
       // 
       // myProfileToolStripMenuItem
       // 
       this->myProfileToolStripMenuItem->Name = L"myProfileToolStripMenuItem";
-      this->myProfileToolStripMenuItem->Size = System::Drawing::Size(221, 26);
+      this->myProfileToolStripMenuItem->Size = System::Drawing::Size(224, 26);
       this->myProfileToolStripMenuItem->Text = L"My profile";
       this->myProfileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::myProfileToolStripMenuItem_Click);
       // 
       // myWalletToolStripMenuItem
       // 
       this->myWalletToolStripMenuItem->Name = L"myWalletToolStripMenuItem";
-      this->myWalletToolStripMenuItem->Size = System::Drawing::Size(221, 26);
+      this->myWalletToolStripMenuItem->Size = System::Drawing::Size(224, 26);
       this->myWalletToolStripMenuItem->Text = L"My wallet";
       // 
       // signOutOfAccountToolStripMenuItem
       // 
       this->signOutOfAccountToolStripMenuItem->Name = L"signOutOfAccountToolStripMenuItem";
-      this->signOutOfAccountToolStripMenuItem->Size = System::Drawing::Size(221, 26);
+      this->signOutOfAccountToolStripMenuItem->Size = System::Drawing::Size(224, 26);
       this->signOutOfAccountToolStripMenuItem->Text = L"Sign out of account";
       // 
       // searchBox

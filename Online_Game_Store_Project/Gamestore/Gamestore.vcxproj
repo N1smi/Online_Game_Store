@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -113,7 +113,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Administrator;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Client;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Feedback;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Date;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\TVector;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\Game;E:\GitHub\Online_Game_Store\Online_Game_Store_Project\User;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

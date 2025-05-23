@@ -3,7 +3,8 @@
 #include "Game.h"
 
 Game::Game()
-  : _title("Unknown Title"),
+  : _game_id(0),
+  _title("Unknown Title"),
     _genre(TGenre),
     _release_date(),
     _developer("Unknown Developer"),
@@ -13,14 +14,15 @@ Game::Game()
     _feedbacks()
   {}
 
-Game::Game(const std::string& title,
+Game::Game(size_t game_id, const std::string& title,
   GenreType genre,
   const Date& release_date,
   const std::string& developer,
   const std::string& description,
   int price, float rating,
   const TVector<Feedback>& feedbacks)
-  : _title(title),
+  : _game_id(game_id),
+  _title(title),
   _genre(genre),
   _release_date(release_date),
   _developer(developer),
@@ -29,10 +31,12 @@ Game::Game(const std::string& title,
   _rating(rating),
   _feedbacks(feedbacks)
 {
+  _rating = calculateAverageRating();
 }
 
 Game::Game(const Game& other)
-  : _title(other._title),
+  : _game_id(other._game_id),
+  _title(other._title),
   _genre(other._genre),
   _release_date(other._release_date),
   _developer(other._developer),
@@ -46,6 +50,7 @@ Game::~Game() {
 
 }
 
+const size_t Game::get_game_id() const { return _game_id; }
 const std::string& Game::get_title() const { return _title; }
 GenreType Game::get_genre() const { return _genre; }
 const Date& Game::get_release_date() const { return _release_date; }
@@ -55,6 +60,7 @@ int Game::get_price() const { return _price; }
 float Game::get_rating() const { return _rating; }
 const TVector<Feedback>& Game::get_feedbacks() const { return _feedbacks; }
 
+void Game::set_game_id(size_t game_id) { _game_id = game_id; }
 void Game::set_title(const std::string& title) { _title = title; }
 void Game::set_genre(GenreType genre) { _genre = genre; }
 void Game::set_release_date(const Date& date) { _release_date = date; }

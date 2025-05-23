@@ -1,5 +1,3 @@
-# Логин;Пароль;Блокировка
-Admin;12345678;0
-Tester;123123123;0
-GigaChad;234234234;0
-Amore;qwerty123^^;0
+#ID;Login;Password;is Admin;Block;Balance;Purchases;Desired;Basket
+1;Tester;123123123;0;0;0;;;
+2;Aboba;123123123AA;0;0;0;;;

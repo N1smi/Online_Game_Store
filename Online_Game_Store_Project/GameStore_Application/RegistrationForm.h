@@ -217,11 +217,20 @@ namespace GameStore_Application {
 
       new_user.set_password(password);
 
-      if (!(*MyGameStoreCopy).add_user(new_user)) {
-        throw std::logic_error("This Login is busy!");
+      size_t user_id = (*MyGameStoreCopy).get_all_users_ref().size() + 1;
+
+      for (size_t i = 0; i < (*MyGameStoreCopy).get_all_users_ref().size(); i++) {
+
+        if(user_id == (*MyGameStoreCopy).get_all_users_ref()[i].get_user_id()) {
+          user_id++;
+        }
       }
 
-      (*MyGameStoreCopy).save_user("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Users.csv", new_user);
+      new_user.set_user_id(user_id);
+
+      if (!(*MyGameStoreCopy).add_client(new_user)) {
+        throw std::logic_error("This Login is busy!");
+      }
 
       this->Close();
     }

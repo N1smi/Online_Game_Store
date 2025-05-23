@@ -15,7 +15,6 @@ namespace CppCLRWinFormsProject {
   /// <summary>
   /// Summary for Form1
   /// </summary>
-  /// 
 
   public ref class LoginForm : public System::Windows::Forms::Form
   {
@@ -25,18 +24,12 @@ namespace CppCLRWinFormsProject {
     LoginForm(void)
     {
       MyGameStore = new GameStore();
-      (*MyGameStore).load_users("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Users.csv");
-      (*MyGameStore).load_games("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Games.csv");
+      (*MyGameStore).load_data("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Users.csv",
+        "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Games.csv");
       InitializeComponent();
-
-      //TODO: Add the constructor code here
-      //
     }
 
   protected:
-    /// <summary>
-    /// Clean up any resources being used.
-    /// </summary>
     ~LoginForm()
     {
       if (components)
@@ -194,6 +187,7 @@ namespace CppCLRWinFormsProject {
       this->Name = L"LoginForm";
       this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
       this->Text = L"LoginForm";
+      this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &LoginForm::LoginForm_FormClosed);
       this->Load += gcnew System::EventHandler(this, &LoginForm::LoginForm_Load);
       this->ResumeLayout(false);
       this->PerformLayout();
@@ -222,23 +216,23 @@ namespace CppCLRWinFormsProject {
       checkUser.set_password(password);
 
       if ((*MyGameStore).user_exists(login)) {
-        const User* Searchuser;
-        Searchuser = (*MyGameStore).find_user(login);
+        const User* Searchuser = (*MyGameStore).find_user(login);
+        auto* client = dynamic_cast<const Client*>(Searchuser); //сломана как и передача в форму 
 
         if (!(*Searchuser).check_password(password)) {
           throw std::logic_error("The password is incorrect");
         }
 
-        if ((*Searchuser).get_block()) {
+        if ((*Searchuser).get_is_blocked()) {
           throw std::logic_error("The user is blocked in our online store!");
         }
 
 
-        if (login == "Admin") {
-          /*придмать*/
+        if ((*Searchuser).get_is_admin()) {
+
         }
         else {
-          GameStore_Application::MainClientForm^ clientForm = gcnew GameStore_Application::MainClientForm(MyGameStore, *Searchuser);
+          GameStore_Application::MainClientForm^ clientForm = gcnew GameStore_Application::MainClientForm(MyGameStore, client);
           clientForm->Owner = this;
           clientForm->Show();
           this->Hide();
@@ -253,5 +247,9 @@ namespace CppCLRWinFormsProject {
       MessageBox::Show(gcnew String(ex.what()), "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
     }
   }
-  };
+  private: System::Void LoginForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+    (*MyGameStore).update_data("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Users.csv",
+      "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Games.csv");
+  }
+};
 }

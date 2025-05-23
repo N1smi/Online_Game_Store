@@ -5,22 +5,25 @@
 
 #include <string>
 
-// class Client;
+class Client;
 
 class Feedback {
-    std::string _client_login;
-    std::string _text;
-    int _assessment;
+  size_t _client_id;
+  Client* _client_login;
+  std::string _text;
+  int _assessment;
 public:
-  Feedback(const std::string& client_login = "",
+  Feedback(size_t client_id = 0, Client* client_login = nullptr,
     const std::string& text = "No Text", int assessment = 1);
   Feedback(const Feedback& other);
 
-  const std::string& get_client_login() const;
+  const size_t get_client_id() const;
+  Client* get_client_login() const;
   const std::string& get_text() const;
   const int get_assessment() const;
 
-  void set_client_login(const std::string& login);
+  void set_client_id(size_t client_id);
+  void set_client_login(Client* client);
   void set_text(const std::string& text);
   void set_assesment(int assesment);
 };
