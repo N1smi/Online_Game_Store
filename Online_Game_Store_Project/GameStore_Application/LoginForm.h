@@ -196,16 +196,22 @@ namespace CppCLRWinFormsProject {
 #pragma endregion
   private: System::Void LoginForm_Load(System::Object^ sender, System::EventArgs^ e) {
   }
+
   private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
   }
+
   private: System::Void LinkLabelSignUp_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
     GameStore_Application::RegistrationForm^ regForm = gcnew GameStore_Application::RegistrationForm(MyGameStore);
     regForm->Owner = this;
     regForm->Show();
     this->Hide();
+    TextBoxLogin->Clear();
+    TextBoxPassword->Clear();
   }
+
   private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
   }
+
   private: System::Void SignInButton_Click(System::Object^ sender, System::EventArgs^ e) {
     std::string login = marshal_as<std::string>(TextBoxLogin->Text);
     std::string password = marshal_as<std::string>(TextBoxPassword->Text);
@@ -216,22 +222,24 @@ namespace CppCLRWinFormsProject {
       checkUser.set_password(password);
 
       if ((*MyGameStore).user_exists(login)) {
-        const User* Searchuser = (*MyGameStore).find_user(login);
-        auto* client = dynamic_cast<const Client*>(Searchuser); //сломана как и передача в форму 
+        User* Searchuser = (*MyGameStore).find_user(login);
 
-        if (!(*Searchuser).check_password(password)) {
+        if (!(Searchuser->check_password(password))) {
           throw std::logic_error("The password is incorrect");
         }
 
-        if ((*Searchuser).get_is_blocked()) {
+        if (Searchuser->get_is_blocked()) {
           throw std::logic_error("The user is blocked in our online store!");
         }
 
-
-        if ((*Searchuser).get_is_admin()) {
+        if (Searchuser->get_is_admin()) {
 
         }
         else {
+          Client* client = dynamic_cast<Client*>(Searchuser);
+          if (client == nullptr) {
+            throw std::logic_error("Client Sign in error");
+          }
           GameStore_Application::MainClientForm^ clientForm = gcnew GameStore_Application::MainClientForm(MyGameStore, client);
           clientForm->Owner = this;
           clientForm->Show();

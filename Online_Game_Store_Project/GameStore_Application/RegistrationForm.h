@@ -221,7 +221,7 @@ namespace GameStore_Application {
 
       for (size_t i = 0; i < (*MyGameStoreCopy).get_all_users_ref().size(); i++) {
 
-        if(user_id == (*MyGameStoreCopy).get_all_users_ref()[i].get_user_id()) {
+        if(user_id == (*MyGameStoreCopy).get_all_users_ref()[i]->get_user_id()) {
           user_id++;
         }
       }

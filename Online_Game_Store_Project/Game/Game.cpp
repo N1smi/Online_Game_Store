@@ -20,7 +20,7 @@ Game::Game(size_t game_id, const std::string& title,
   const std::string& developer,
   const std::string& description,
   int price, float rating,
-  const TVector<Feedback>& feedbacks)
+  const TVector<Feedback*>& feedbacks)
   : _game_id(game_id),
   _title(title),
   _genre(genre),
@@ -58,7 +58,7 @@ const std::string& Game::get_developer() const { return _developer; }
 const std::string& Game::get_description() const { return _description; }
 int Game::get_price() const { return _price; }
 float Game::get_rating() const { return _rating; }
-const TVector<Feedback>& Game::get_feedbacks() const { return _feedbacks; }
+const TVector<Feedback*>& Game::get_feedbacks() const { return _feedbacks; }
 
 void Game::set_game_id(size_t game_id) { _game_id = game_id; }
 void Game::set_title(const std::string& title) { _title = title; }
@@ -68,7 +68,7 @@ void Game::set_developer(const std::string& developer) { _developer = developer;
 void Game::set_description(const std::string& description) { _description = description; }
 void Game::set_price(int price) { _price = price; }
 
-void Game::addFeedback(const Feedback& feedback) {
+void Game::addFeedback(Feedback* feedback) {
   _feedbacks.push_back(feedback);
   _rating = calculateAverageRating();
 }
@@ -80,7 +80,7 @@ float Game::calculateAverageRating() const {
 
   float sum = 0.0f;
   for (size_t i = 0; i < _feedbacks.size(); i++) {
-    sum += _feedbacks[i].get_assessment();
+    sum += _feedbacks[i]->get_assessment();
   }
   return sum / _feedbacks.size();
 }

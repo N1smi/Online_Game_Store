@@ -2119,11 +2119,8 @@ bool test_1_csv_tables_saving() {
   Date releaseDate1(19, 5, 2015);
   Date releaseDate2(12, 12, 2022);
 
-  Feedback feedback1(1,nullptr, "Good Game!", 5);
-  Feedback feedback2(2,nullptr, "Dont like", 3);
-
-  TVector<Feedback> feedbacks1 = { feedback1, feedback2 };
-  TVector<Feedback> feedbacks2 = { feedback2 };
+  TVector<Feedback*> feedbacks1;
+  TVector<Feedback*> feedbacks2;
 
   Game game1(1, "The Witcher 3", GenreType::RPG, releaseDate1, "CD Projekt", "Open world RPG", 3999, 0, feedbacks1);
   Game game2(2, "Cyberpunk 2077", GenreType::RPG, releaseDate2, "CD Projekt", "Futuristic RPG", 5999, 0, feedbacks2);
@@ -2133,6 +2130,27 @@ bool test_1_csv_tables_saving() {
 
   Store.add_client(new_user1);
   Store.add_client(new_user2);
+
+  Game* pGame1 = const_cast<Game*>(Store.find_game("The Witcher 3"));
+  Game* pGame2 = const_cast<Game*>(Store.find_game("Cyberpunk 2077"));
+
+  // Добавляем игры в корзины клиентов
+  if (auto client1 = dynamic_cast<Client*>(Store.find_user("Yes123"))) {
+    client1->add_basket(pGame1);  // Первый клиент добавляет Witcher 3
+    client1->add_basket(pGame2);  // И Cyberpunk 2077
+    auto feedback1 = new Feedback(client1->get_user_id(), client1, "Good Game!", 5);
+    auto feedback2 = new Feedback(client1->get_user_id(), client1, "Dont like", 3);
+    (*pGame1).addFeedback(feedback1);
+    (*pGame1).addFeedback(feedback2);
+  }
+
+  if (auto client2 = dynamic_cast<Client*>(Store.find_user("No123"))) {
+    client2->add_basket(pGame2);  // Второй клиент добавляет только Cyberpunk
+    auto feedback2 = new Feedback(client2->get_user_id(), client2, "Dont like", 3);
+    (*pGame1).addFeedback(feedback2);
+    (*pGame2).addFeedback(feedback2);
+  }
+
 
   Store.print_users();
   Store.print_games();
@@ -2366,12 +2384,10 @@ int main() {
   std::cout << "Csv tables test" << std::endl;
   set_color(7, 0);
 
-  //TestSystem::start_test(test_1_csv_tables_saving,
-  //  " Csv.test_1_csv_tables_saving");
+  TestSystem::start_test(test_1_csv_tables_saving,
+    " Csv.test_1_csv_tables_saving");
   TestSystem::start_test(test_2_csv_tables_reading,
     " Csv.test_2_csv_tables_reading");
-
-
 
   TestSystem::print_final_info();
   TestSystem::count_success = 0;

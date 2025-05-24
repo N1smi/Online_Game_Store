@@ -22,7 +22,7 @@ class Game {
   std::string _description;
   int _price;
   float _rating;
-  TVector<Feedback> _feedbacks;
+  TVector<Feedback*> _feedbacks;
 public:
   Game();
   Game(size_t game_id ,const std::string& title,
@@ -31,7 +31,7 @@ public:
     const std::string& developer,
     const std::string& description,
     int price, float rating,
-    const TVector<Feedback>& feedbacks);
+    const TVector<Feedback*>& feedbacks);
 
   Game(const Game& other);
 
@@ -45,7 +45,7 @@ public:
   const std::string& get_description() const;
   int get_price() const;
   float get_rating() const;
-  const TVector<Feedback>& get_feedbacks() const;
+  const TVector<Feedback*>& get_feedbacks() const;
 
   void set_game_id(size_t game_id);
   void set_title(const std::string& title);
@@ -55,7 +55,7 @@ public:
   void set_description(const std::string& description);
   void set_price(int price);
 
-  void addFeedback(const Feedback& feedback);
+  void addFeedback(Feedback* feedback);
  private:
   float calculateAverageRating() const;
 };

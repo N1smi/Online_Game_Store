@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 #include "Gamestore.h"
 
 GameStore::GameStore() : _users(), _games(){}
@@ -110,23 +111,31 @@ bool GameStore::load_games(const std::string& filename) {
     std::getline(ss, price, ';');
     std::getline(ss, rating, ';');
 
-    TVector<Feedback> feedbacks;
+    TVector<Feedback*> feedbacks;
     std::string token;
     while (std::getline(ss, token, ';')) {
       if (token.empty()) continue;
+      
+      if (!token.empty() && token.front() == '"') token.erase(0, 1);
+      if (!token.empty() && token.back() == '"') token.pop_back();
 
       std::stringstream feedback_ss(token);
       std::string str_client_id, text, assessment_str;
 
-
       std::getline(feedback_ss, str_client_id, ',');
 
-      std::getline(feedback_ss, text, ',');
 
-      if (!text.empty() && text.front() == '\"') text.erase(0, 1);
-      if (!text.empty() && text.back() == '\"') text.pop_back();
+      if (feedback_ss.peek() == '"') {
+        feedback_ss.get();
+        std::getline(feedback_ss, text, '"');
+        feedback_ss.get();
+      }
+      else {
+        std::getline(feedback_ss, text, ',');
+      }
 
       std::getline(feedback_ss, assessment_str);
+
 
       int assessment = std::stoi(assessment_str);
 
@@ -136,7 +145,7 @@ bool GameStore::load_games(const std::string& filename) {
         if (_users[i]->get_user_id() == client_id) {
           Client* client = dynamic_cast<Client*>(_users[i]);
           if (client) {
-            Feedback feedback(client_id, client, text, assessment);
+            Feedback* feedback = new Feedback(client_id, client, text, assessment);
             feedbacks.push_back(feedback);
           }
           break;
@@ -298,9 +307,9 @@ bool GameStore::save_games(const std::string& filename) const {
     const auto& feedbacks = _games[i].get_feedbacks();
     for (size_t j = 0; j < _games[i].get_feedbacks().size(); j++) {
       const auto& feedback = feedbacks[j];
-      file << feedback.get_client_id() << ","
-        << "\"" << feedback.get_text() << "\"" << ","
-        << feedback.get_assessment() << ";";
+      file << feedback->get_client_id() << ","
+        << "\"" << feedback->get_text()<< "\"" << ","
+        << feedback->get_assessment() << ";";
     }
     file << "\n";
 
@@ -364,7 +373,7 @@ const Game* GameStore::find_game(const std::string& title) const {
   return nullptr;
 }
 
-const User* GameStore::find_user(const std::string& login) const {
+User* GameStore::find_user(const std::string& login) const {
   for (size_t i = 0; i < _users.size(); i++) {
 
     if (_users[i] != nullptr && _users[i]->get_login() == login) {
@@ -417,24 +426,25 @@ void GameStore::print_users() const {
       << ", Password: " << _users[i]->get_password()
       << ", isAdmin: " << _users[i]->get_is_admin()
       << ", Blocked: " << _users[i]->get_is_blocked()
-      << "\n" << &_users[i] <<"\n";
+      << "\n" << _users[i] <<"\n";
     if (_users[i]->get_is_admin() == false) {
       Client* client = dynamic_cast<Client*>(_users[i]);
       std::cout << "Balance: " << client->get_balance() << "\n";
 
       std::cout << "Purchases:\n";
       for (size_t i = 0; i < client->get_purchases().size(); i++) {
-        std::cout << client->get_purchases()[i];
+        std::cout << client->get_purchases()[i] << " ";
       }
-
+      std::cout << "\n";
       std::cout << "Desired:\n";
       for (size_t i = 0; i < client->get_desired().size(); i++) {
-        std::cout << client->get_desired()[i];
+        std::cout << client->get_desired()[i] << " ";
       }
-
+      std::cout << "\n";
       std::cout << "Basket:\n";
       for (size_t i = 0; i < client->get_basket().size(); i++) {
-        std::cout << client->get_basket()[i];
+        std::cout << client->get_basket()[i] << " ";
+        std::cout << "\n";
       }
     }
   }
@@ -451,17 +461,18 @@ void GameStore::print_games() const {
       << ", Description: " << _games[i].get_description()
       << ", Price: " << _games[i].get_price()
       << ", Rating: " << _games[i].get_rating()
+      << ", Game Address: " << &_games[i]
       << "\nFeedbacks:\n";
 
     const auto& feedbacks = _games[i].get_feedbacks();
     for (size_t i = 0; i < feedbacks.size(); i++) {
-      std::cout << "  Client ID: " << feedbacks[i].get_client_id()
-        << "ID ADDRESSS:" << feedbacks[i].get_client_login() << " ";
-      if (feedbacks[i].get_client_login() != nullptr) {
-        std::cout << feedbacks[i].get_client_login()->get_user_id();
+      std::cout << "  Client ID: " << feedbacks[i]->get_client_id()
+        << "ID ADDRESSS User:" << feedbacks[i]->get_client_login() << " ";
+      if (feedbacks[i]->get_client_login() != nullptr) {
+        std::cout << feedbacks[i]->get_client_login()->get_user_id();
       }
-        std::cout << ", Text: " << feedbacks[i].get_text()
-        << ", Assessment: " << feedbacks[i].get_assessment()
+        std::cout << ", Text: " << feedbacks[i]->get_text()
+        << ", Assessment: " << feedbacks[i]->get_assessment()
         << "\n";
     }
     std::cout << "----------------------------\n";

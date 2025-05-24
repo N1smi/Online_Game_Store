@@ -29,7 +29,7 @@ public:
 
   const Game* find_game(const std::string& title) const;
 
-  const User* find_user(const std::string& login) const;
+  User* find_user(const std::string& login) const;
 
   bool game_exists(const std::string& title) const;
 
