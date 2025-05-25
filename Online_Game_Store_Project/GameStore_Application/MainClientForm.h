@@ -35,7 +35,7 @@ namespace GameStore_Application {
   private: System::Windows::Forms::FlowLayoutPanel^ gamesPanel;
 
 
-
+  private: Panel^ cartinfoPanel = nullptr;
   private: Panel^ gameInfoPanel = nullptr;
   private: Panel^ myWalletInfoPanel = nullptr;
   private: bool closeOwner = true;
@@ -97,12 +97,15 @@ namespace GameStore_Application {
       // 
       // menuStrip1
       // 
-      this->menuStrip1->Dock = System::Windows::Forms::DockStyle::Right;
+      this->menuStrip1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+      this->menuStrip1->BackColor = System::Drawing::SystemColors::Control;
+      this->menuStrip1->Dock = System::Windows::Forms::DockStyle::None;
       this->menuStrip1->ImageScalingSize = System::Drawing::Size(20, 20);
       this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->nameBalanceToolStripMenuItem });
-      this->menuStrip1->Location = System::Drawing::Point(1026, 0);
+      this->menuStrip1->Location = System::Drawing::Point(1055, 0);
       this->menuStrip1->Name = L"menuStrip1";
-      this->menuStrip1->Size = System::Drawing::Size(156, 653);
+      this->menuStrip1->RenderMode = System::Windows::Forms::ToolStripRenderMode::Professional;
+      this->menuStrip1->Size = System::Drawing::Size(127, 28);
       this->menuStrip1->TabIndex = 0;
       this->menuStrip1->Text = L"menuStrip1";
       // 
@@ -113,27 +116,27 @@ namespace GameStore_Application {
           this->myWalletToolStripMenuItem, this->signOutOfAccountToolStripMenuItem
       });
       this->nameBalanceToolStripMenuItem->Name = L"nameBalanceToolStripMenuItem";
-      this->nameBalanceToolStripMenuItem->Size = System::Drawing::Size(143, 24);
+      this->nameBalanceToolStripMenuItem->Size = System::Drawing::Size(119, 24);
       this->nameBalanceToolStripMenuItem->Text = L"Name balance";
       // 
       // myProfileToolStripMenuItem
       // 
       this->myProfileToolStripMenuItem->Name = L"myProfileToolStripMenuItem";
-      this->myProfileToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+      this->myProfileToolStripMenuItem->Size = System::Drawing::Size(221, 26);
       this->myProfileToolStripMenuItem->Text = L"My profile";
       this->myProfileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::myProfileToolStripMenuItem_Click);
       // 
       // myWalletToolStripMenuItem
       // 
       this->myWalletToolStripMenuItem->Name = L"myWalletToolStripMenuItem";
-      this->myWalletToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+      this->myWalletToolStripMenuItem->Size = System::Drawing::Size(221, 26);
       this->myWalletToolStripMenuItem->Text = L"My wallet";
       this->myWalletToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::myWalletToolStripMenuItem_Click);
       // 
       // signOutOfAccountToolStripMenuItem
       // 
       this->signOutOfAccountToolStripMenuItem->Name = L"signOutOfAccountToolStripMenuItem";
-      this->signOutOfAccountToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+      this->signOutOfAccountToolStripMenuItem->Size = System::Drawing::Size(221, 26);
       this->signOutOfAccountToolStripMenuItem->Text = L"Sign out of account";
       this->signOutOfAccountToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::signOutOfAccountToolStripMenuItem_Click);
       // 
@@ -195,6 +198,7 @@ namespace GameStore_Application {
       this->WishlistButton->TabIndex = 5;
       this->WishlistButton->Text = L"Wishlist";
       this->WishlistButton->UseVisualStyleBackColor = true;
+      this->WishlistButton->Click += gcnew System::EventHandler(this, &MainClientForm::WishlistButton_Click);
       // 
       // CartButton
       // 
@@ -208,6 +212,7 @@ namespace GameStore_Application {
       this->CartButton->TabIndex = 6;
       this->CartButton->Text = L"Cart";
       this->CartButton->UseVisualStyleBackColor = true;
+      this->CartButton->Click += gcnew System::EventHandler(this, &MainClientForm::CartButton_Click);
       // 
       // MainClientForm
       // 
@@ -304,12 +309,18 @@ namespace GameStore_Application {
     buyButton->Click += gcnew EventHandler(this, &MainClientForm::BuyGame);
     buyButton->Tag = ptr;
 
+    Button^ AddtoCart = gcnew Button();
+    AddtoCart->Text = "Add to Cart";
+    AddtoCart->Location = Point(110, 210);
+    AddtoCart->Click += gcnew EventHandler(this, &MainClientForm::Add_to_Cart);
+    AddtoCart->Tag = ptr;
+
     card->Controls->Add(title);
     card->Controls->Add(data);
     card->Controls->Add(rating);
     card->Controls->Add(price);
     card->Controls->Add(buyButton);
-
+    card->Controls->Add(AddtoCart);
     return card;
   }
 
@@ -320,7 +331,7 @@ namespace GameStore_Application {
 
     if (MyClient->get_balance() >= game->get_price()) {
       // MyClient->PurchaseGame(game);
-      MessageBox::Show("Игра куплена!", "Успех");
+      MessageBox::Show("Thanks for the purchase!", "Succes", MessageBoxButtons::OK, MessageBoxIcon::Information);
       //UpdateBalanceDisplay();
     }
     else {
@@ -493,6 +504,7 @@ namespace GameStore_Application {
 
     Button^ btnAddReview = gcnew Button();
     btnAddReview->Text = L"Add Feedback";
+    btnAddReview->AutoSize = true;
     btnAddReview->Size = System::Drawing::Size(120, 30);
     btnAddReview->Location = Point(ClientSize.Width - 230, currentY);
     btnAddReview->Click += gcnew EventHandler(this, &MainClientForm::AddFeedback_Click);
@@ -604,6 +616,8 @@ namespace GameStore_Application {
 
     String^ reviewText = rtb->Text;
 
+    reviewText = reviewText->Replace(L"\"", L"");
+
     GroupBox^ group = nullptr;
     for each (Control ^ ctrl in gameInfoPanel->Controls) {
       if (ctrl->Name == L"ratingGroup") {
@@ -629,7 +643,7 @@ namespace GameStore_Application {
       return;
     }
 
-    std::string Text = marshal_as<std::string>(rtb->Text);
+    std::string Text = marshal_as<std::string>(reviewText);
     Feedback* user_feedback = new Feedback(MyClient->get_user_id(), MyClient, Text, rating);
 
     IntPtr ptr = (IntPtr)gameInfoPanel->Tag;
@@ -660,12 +674,15 @@ namespace GameStore_Application {
     this->CartButton->Visible = false;
     this->WishlistButton->Visible = false;
 
-   
+    if (cartinfoPanel != nullptr) {
+      this->Controls->Remove(cartinfoPanel);
+      delete cartinfoPanel;
+    }
+
     if (gameInfoPanel != nullptr && gameInfoPanel->Parent != nullptr) {
       this->Controls->Remove(gameInfoPanel);
       delete gameInfoPanel;
     }
-   
 
     myWalletInfoPanel = gcnew Panel();
     myWalletInfoPanel->Size = System::Drawing::Size(this->Width - 50, this->Height - 75);
@@ -733,7 +750,7 @@ namespace GameStore_Application {
     this->CartButton->Visible = true;
     this->WishlistButton->Visible = true;
 
-    if (myWalletInfoPanel->Parent != nullptr) {
+    if (myWalletInfoPanel != nullptr) {
       this->Controls->Remove(myWalletInfoPanel);
       delete myWalletInfoPanel;
     }
@@ -768,6 +785,174 @@ namespace GameStore_Application {
 
     this->nameBalanceToolStripMenuItem->Text = displayText;
     this->myWalletToolStripMenuItem->Text = displayText2;
+  }
+
+  private: System::Void WishlistButton_Click(System::Object^ sender, System::EventArgs^ e) {
+
+  }
+
+  private: System::Void CartButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    int width = searchBox->Width;
+    width += SearchGames->Width;
+    Point pos = searchBox->Location;
+    this->searchBox->Visible = false;
+    this->SearchGames->Visible = false;
+    this->gamesPanel->Visible = false;
+    this->FilterGenre->Visible = false;
+    this->CartButton->Visible = false;
+    this->WishlistButton->Visible = false;
+
+    cartinfoPanel = gcnew Panel();
+    cartinfoPanel->Size = System::Drawing::Size(width, this->Height - 100);
+    cartinfoPanel->Margin = System::Windows::Forms::Padding(10);
+    cartinfoPanel->Location = pos;
+    cartinfoPanel->AutoScroll = true;
+    this->Controls->Add(cartinfoPanel);
+
+    Button^ backButton = gcnew Button();
+    backButton->Text = L"Back";
+    backButton->Size = System::Drawing::Size(80, 30);
+    backButton->Location = Point(10, 10);
+    backButton->Click += gcnew EventHandler(this, &MainClientForm::BackButtonCart_Click);
+    cartinfoPanel->Controls->Add(backButton);
+
+    Label^ lablebasket = gcnew Label();
+    lablebasket->AutoSize = false;
+    lablebasket->Text = "Your Shopping Cart";
+    lablebasket->Font = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
+    lablebasket->Location = Point((cartinfoPanel->Width)/2 - 110, 10);
+    lablebasket->TextAlign = ContentAlignment::MiddleCenter;
+    lablebasket->AutoSize = true;
+    cartinfoPanel->Controls->Add(lablebasket);
+
+
+    int currentY = 50;
+    for (size_t i = 0; i < MyClient->get_basket().size(); i++) {
+      const Game* game = MyClient->get_basket()[i];
+
+      Panel^ gameCardinCart = CreateGameCardinCart(game);
+      gameCardinCart->Location = Point(10, currentY);
+      cartinfoPanel->Controls->Add(gameCardinCart);
+      currentY += gameCardinCart->Height + 10;
+    }
+  }
+
+  private: Void BackButtonCart_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->searchBox->Visible = true;
+    this->SearchGames->Visible = true;
+    this->gamesPanel->Visible = true;
+    this->FilterGenre->Visible = true;
+    this->CartButton->Visible = true;
+    this->WishlistButton->Visible = true;
+
+    if (cartinfoPanel != nullptr) {
+      this->Controls->Remove(cartinfoPanel);
+      delete cartinfoPanel;
+    }
+  }
+
+  private: Panel^ CreateGameCardinCart(const Game* game) {
+    Panel^ card = gcnew Panel();
+    card->Size = System::Drawing::Size(cartinfoPanel->Width - 20, 160);
+    card->BorderStyle = BorderStyle::FixedSingle;
+
+    Game* gameptr = const_cast<Game*>(game);
+    IntPtr ptr(gameptr);
+    card->Tag = ptr;
+    card->Margin = System::Windows::Forms::Padding(7);
+
+    card->BackColor = Color::WhiteSmoke;
+    card->Cursor = Cursors::Hand;
+
+    int currentX = 300;
+
+    PictureBox^ pb = gcnew PictureBox();
+
+    pb->AutoSize = true;
+
+    pb->Location = Point(10, 10);
+
+    System::String^ gameTitle = msclr::interop::marshal_as<System::String^>(game->get_title());
+
+    System::String^ imagesFolder = "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Images";
+
+    System::String^ imagePath = System::IO::Path::Combine(imagesFolder, gameTitle + " Cart.jpg");
+
+    if (System::IO::File::Exists(imagePath)) {
+      pb->Image = Image::FromFile(imagePath);
+      card->Controls->Add(pb);
+    }
+
+    Label^ title = gcnew Label();
+    title->AutoSize = true;
+    title->Text = msclr::interop::marshal_as<System::String^>(game->get_title());
+    title->Location = Point(currentX + 10,20);
+    title->Font = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+
+    Label^ price = gcnew Label();
+    price->AutoSize = true;
+    price->Text = String::Format("{0} rub", game->get_price());
+    price->Location = Point(card->Width - 160, card->Height-50);
+
+    Button^ buyButton = gcnew Button();
+    buyButton->Text = "Buy";
+    buyButton->Location = Point(card->Width - 160, card->Height - 30);
+    buyButton->Click += gcnew EventHandler(this, &MainClientForm::BuyGame);
+    buyButton->Tag = ptr;
+
+    Button^ RemoveButton = gcnew Button();
+    RemoveButton->Text = "Remove";
+    RemoveButton->Location = Point(card->Width - 80, card->Height - 30);
+    RemoveButton->Click += gcnew EventHandler(this, &MainClientForm::RemoveGameinCart);
+    RemoveButton->Tag = ptr;
+
+    card->Controls->Add(title);
+    card->Controls->Add(price);
+    card->Controls->Add(buyButton);
+    card->Controls->Add(RemoveButton);
+
+    return card;
+  }
+
+  private: System::Void Add_to_Cart(System::Object^ sender, System::EventArgs^ e) {
+    Button^ btn = safe_cast<Button^>(sender);
+
+    IntPtr ptr = (IntPtr)btn->Tag;
+    Game* game = (Game*)ptr.ToPointer();
+
+    MyClient->add_basket(game);
+    MessageBox::Show(String::Format(L"Added to cart: {0}", gcnew String(game->get_title().c_str())));
+  }
+
+  private: System::Void RemoveGameinCart(System::Object^ sender, System::EventArgs^ e) {
+    Button^ btn = safe_cast<Button^>(sender);
+    IntPtr ptr = (IntPtr)btn->Tag;
+    Game* game = (Game*)ptr.ToPointer();
+
+    MyClient->remove_basket(game);
+
+    Panel^ panelToRemove = nullptr;
+    for each (Control ^ ctrl in cartinfoPanel->Controls) {
+      if (ctrl->Tag != nullptr && (IntPtr)ctrl->Tag == ptr) {
+        panelToRemove = safe_cast<Panel^>(ctrl);
+        break;
+      }
+    }
+
+    if (panelToRemove != nullptr) {
+      cartinfoPanel->Controls->Remove(panelToRemove);
+      delete panelToRemove;
+
+      int currentY = 50;
+      for each (Control ^ ctrl in cartinfoPanel->Controls) {
+        if (ctrl->Tag != nullptr) {
+          ctrl->Location = Point(10, currentY);
+          currentY += ctrl->Height + 10;
+        }
+      }
+    }
+
+    MessageBox::Show(String::Format(L"Deleted from the cart: {0}", gcnew String(game->get_title().c_str())));
   }
 };
 }

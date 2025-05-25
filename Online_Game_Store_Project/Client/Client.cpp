@@ -60,3 +60,12 @@ void Client::add_desired(Game* game) {
 void Client::add_basket(Game* game) {
   _basket.push_back(game);
 }
+
+void Client::remove_basket(Game* game) {
+  for (size_t i = 0; i < _basket.size(); i++) {
+    if (_basket[i] == game) {
+      _basket.erase(i);
+      break;
+    }
+  }
+}

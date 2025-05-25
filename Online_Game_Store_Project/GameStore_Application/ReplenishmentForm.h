@@ -33,8 +33,9 @@ namespace GameStore_Application {
 
 
 
-
-
+	private: bool isFirstTimeCardN = true;
+	private: bool isFirstTimeValidaty = true;
+	private: bool isFirstTimeCode = true;
 
 	public:
 		int* Amount;
@@ -130,6 +131,7 @@ namespace GameStore_Application {
 			this->textBoxcardNumber->Size = System::Drawing::Size(239, 34);
 			this->textBoxcardNumber->TabIndex = 5;
 			this->textBoxcardNumber->Text = L"0000 0000 0000 0000";
+			this->textBoxcardNumber->TextChanged += gcnew System::EventHandler(this, &ReplenishmentForm::textBoxcardNumber_TextChanged);
 			// 
 			// LabelCardNumber
 			// 
@@ -154,6 +156,7 @@ namespace GameStore_Application {
 			this->textBoxValidityPeriod->Size = System::Drawing::Size(88, 34);
 			this->textBoxValidityPeriod->TabIndex = 7;
 			this->textBoxValidityPeriod->Text = L"MM/YY";
+			this->textBoxValidityPeriod->TextChanged += gcnew System::EventHandler(this, &ReplenishmentForm::textBoxValidityPeriod_TextChanged);
 			// 
 			// labelValidatyPeriod
 			// 
@@ -179,6 +182,7 @@ namespace GameStore_Application {
 			this->textBoxCode->TabIndex = 9;
 			this->textBoxCode->Tag = L"";
 			this->textBoxCode->Text = L"CVV2/CVC2";
+			this->textBoxCode->TextChanged += gcnew System::EventHandler(this, &ReplenishmentForm::textBoxCode_TextChanged);
 			// 
 			// labelCode
 			// 
@@ -247,7 +251,9 @@ private: System::Void LabelCardNumber_Click(System::Object^ sender, System::Even
 
 private: System::Void buttonAddMain_Click(System::Object^ sender, System::EventArgs^ e) {
 	std::string amount = marshal_as<std::string>(textBoxAmount->Text);
-	std::string card = marshal_as<std::string>(textBoxcardNumber->Text);
+	String^ cardS = textBoxcardNumber->Text;
+	cardS = cardS->Replace(L" ", L"");
+	std::string card = marshal_as<std::string>(cardS);
 	std::string validaty = marshal_as<std::string>(textBoxValidityPeriod->Text);
 	std::string code = marshal_as<std::string>(textBoxCode->Text);
 
@@ -310,6 +316,32 @@ bool IsDigitsOnly(String^ str) {
 }
 
 private: System::Void ReplenishmentForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+}
+
+
+
+private: System::Void textBoxcardNumber_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (isFirstTimeCardN) {
+		textBoxcardNumber->ForeColor = Color::Black;
+		textBoxcardNumber->Text = "";
+		isFirstTimeCardN = false;
+	}
+}
+
+private: System::Void textBoxValidityPeriod_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (isFirstTimeValidaty) {
+		textBoxValidityPeriod->ForeColor = Color::Black;
+		textBoxValidityPeriod->Text = "";
+		isFirstTimeValidaty = false;
+	}
+}
+
+private: System::Void textBoxCode_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	if (isFirstTimeCode) {
+		textBoxCode->ForeColor = Color::Black;
+		textBoxCode->Text = "";
+		isFirstTimeCode = false;
+	}
 }
 };
 }

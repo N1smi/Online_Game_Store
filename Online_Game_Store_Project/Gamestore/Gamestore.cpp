@@ -429,7 +429,6 @@ size_t GameStore::find_available_user_id() {
   return candidate_id;
 }
 
-
 void GameStore::print_users() const {
   std::cout << "All users:\n";
   for (size_t i = 0; i < _users.size();i++) {

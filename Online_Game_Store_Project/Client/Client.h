@@ -34,6 +34,8 @@ class Client : public User {
    void add_purchase(Game* game);
    void add_desired(Game* game);
    void add_basket(Game* game);
+
+   void remove_basket(Game* game);
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_CLIENT_CLIENT_H_
