@@ -115,27 +115,12 @@ bool GameStore::load_games(const std::string& filename) {
     std::string token;
     while (std::getline(ss, token, ';')) {
       if (token.empty()) continue;
-      
-      if (!token.empty() && token.front() == '"') token.erase(0, 1);
-      if (!token.empty() && token.back() == '"') token.pop_back();
 
       std::stringstream feedback_ss(token);
-      std::string str_client_id, text, assessment_str;
 
-      std::getline(feedback_ss, str_client_id, ',');
-
-
-      if (feedback_ss.peek() == '"') {
-        feedback_ss.get();
-        std::getline(feedback_ss, text, '"');
-        feedback_ss.get();
-      }
-      else {
-        std::getline(feedback_ss, text, ',');
-      }
-
-      std::getline(feedback_ss, assessment_str);
-
+      std::string str_client_id = read_csv_field(feedback_ss);
+      std::string text = read_csv_field(feedback_ss);
+      std::string assessment_str = read_csv_field(feedback_ss);
 
       int assessment = std::stoi(assessment_str);
 
@@ -308,7 +293,7 @@ bool GameStore::save_games(const std::string& filename) const {
     for (size_t j = 0; j < _games[i].get_feedbacks().size(); j++) {
       const auto& feedback = feedbacks[j];
       file << feedback->get_client_id() << ","
-        << "\"" << feedback->get_text()<< "\"" << ","
+        <<  escape_csv_text(feedback->get_text()) << ","
         << feedback->get_assessment() << ";";
     }
     file << "\n";
@@ -418,6 +403,33 @@ const TVector<Game>& GameStore::get_all_games_ref() const {
   return _games;
 }
 
+size_t GameStore::find_available_user_id() {
+  if (_users.is_empty()) {
+    return 1;
+  }
+
+  TVector<size_t> existing_ids;
+  existing_ids.reserve(_users.size());
+  for (size_t i = 0; i < _users.size(); i++) {
+    existing_ids.push_back(_users[i]->get_user_id());
+  }
+
+  T_sort(existing_ids);
+
+  size_t candidate_id = 1;
+  for (size_t id : existing_ids) {
+    if (id == candidate_id) {
+      ++candidate_id;
+    }
+    else if (id > candidate_id) {
+      break;
+    }
+  }
+
+  return candidate_id;
+}
+
+
 void GameStore::print_users() const {
   std::cout << "All users:\n";
   for (size_t i = 0; i < _users.size();i++) {
@@ -479,3 +491,48 @@ void GameStore::print_games() const {
   }
 }
 
+std::string GameStore::escape_csv_text(const std::string& text) {
+  std::string escaped = "\"";
+  for (char c : text) {
+    if (c == '\"') {
+      escaped += "\"\""; // Экранирование кавычек
+    }
+    else {
+      escaped += c;
+    }
+  }
+  escaped += "\"";
+  return escaped;
+}
+
+std::string GameStore::read_csv_field(std::stringstream& ss) {
+  std::string field;
+  if (ss.peek() == '\"') {
+    // Поле в кавычках
+    ss.get(); // Удаляем начальную кавычку
+    while (true) {
+      char c = ss.get();
+      if (c == '\"') {
+        if (ss.peek() == '\"') {
+          // Экранированная кавычка
+          field += '\"';
+          ss.get(); // Удаляем вторую кавычку
+        }
+        else {
+          // Конец поля
+          break;
+        }
+      }
+      else {
+        field += c;
+      }
+    }
+    // После закрывающей кавычки обычно идет запятая или конец строки
+    if (ss.peek() == ',') ss.get(); // Удаляем запятую, если есть
+  }
+  else {
+    // Поле без кавычек
+    std::getline(ss, field, ',');
+  }
+  return field;
+}

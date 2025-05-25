@@ -244,6 +244,8 @@ namespace CppCLRWinFormsProject {
           clientForm->Owner = this;
           clientForm->Show();
           this->Hide();
+          TextBoxLogin->Clear();
+          TextBoxPassword->Clear();
         }
 
       }
@@ -255,6 +257,7 @@ namespace CppCLRWinFormsProject {
       MessageBox::Show(gcnew String(ex.what()), "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
     }
   }
+
   private: System::Void LoginForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
     (*MyGameStore).update_data("E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Users.csv",
       "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Games.csv");

@@ -36,7 +36,6 @@ class User {
    bool check_password(const std::string& input_password) const;
 
    virtual User& operator=(const User& other);
-
 protected:
    bool isAlphaNum(char ch);
 };

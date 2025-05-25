@@ -145,6 +145,9 @@
     <ClInclude Include="RegistrationForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="ReplenishmentForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +162,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RegistrationForm.cpp" />
+    <ClCompile Include="ReplenishmentForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
@@ -179,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RegistrationForm.resx">
       <DependentUpon>RegistrationForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReplenishmentForm.resx">
+      <DependentUpon>ReplenishmentForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ReplenishmentForm.h"
+
 namespace GameStore_Application {
 
   using namespace System;
@@ -35,7 +37,10 @@ namespace GameStore_Application {
 
 
   private: Panel^ gameInfoPanel = nullptr;
-
+  private: Panel^ myWalletInfoPanel = nullptr;
+  private: bool closeOwner = true;
+  private: System::Windows::Forms::Button^ WishlistButton;
+  private: System::Windows::Forms::Button^ CartButton;
   public:
     Client* MyClient;
     MainClientForm(GameStore* MyGameStore, Client* client)
@@ -85,6 +90,8 @@ namespace GameStore_Application {
       this->FilterGenre = (gcnew System::Windows::Forms::ComboBox());
       this->SearchGames = (gcnew System::Windows::Forms::Button());
       this->gamesPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
+      this->WishlistButton = (gcnew System::Windows::Forms::Button());
+      this->CartButton = (gcnew System::Windows::Forms::Button());
       this->menuStrip1->SuspendLayout();
       this->SuspendLayout();
       // 
@@ -112,21 +119,23 @@ namespace GameStore_Application {
       // myProfileToolStripMenuItem
       // 
       this->myProfileToolStripMenuItem->Name = L"myProfileToolStripMenuItem";
-      this->myProfileToolStripMenuItem->Size = System::Drawing::Size(221, 26);
+      this->myProfileToolStripMenuItem->Size = System::Drawing::Size(224, 26);
       this->myProfileToolStripMenuItem->Text = L"My profile";
       this->myProfileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::myProfileToolStripMenuItem_Click);
       // 
       // myWalletToolStripMenuItem
       // 
       this->myWalletToolStripMenuItem->Name = L"myWalletToolStripMenuItem";
-      this->myWalletToolStripMenuItem->Size = System::Drawing::Size(221, 26);
+      this->myWalletToolStripMenuItem->Size = System::Drawing::Size(224, 26);
       this->myWalletToolStripMenuItem->Text = L"My wallet";
+      this->myWalletToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::myWalletToolStripMenuItem_Click);
       // 
       // signOutOfAccountToolStripMenuItem
       // 
       this->signOutOfAccountToolStripMenuItem->Name = L"signOutOfAccountToolStripMenuItem";
-      this->signOutOfAccountToolStripMenuItem->Size = System::Drawing::Size(221, 26);
+      this->signOutOfAccountToolStripMenuItem->Size = System::Drawing::Size(224, 26);
       this->signOutOfAccountToolStripMenuItem->Text = L"Sign out of account";
+      this->signOutOfAccountToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainClientForm::signOutOfAccountToolStripMenuItem_Click);
       // 
       // searchBox
       // 
@@ -174,11 +183,39 @@ namespace GameStore_Application {
       this->gamesPanel->Size = System::Drawing::Size(1158, 498);
       this->gamesPanel->TabIndex = 4;
       // 
+      // WishlistButton
+      // 
+      this->WishlistButton->Anchor = System::Windows::Forms::AnchorStyles::Top;
+      this->WishlistButton->AutoSize = true;
+      this->WishlistButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+        static_cast<System::Byte>(204)));
+      this->WishlistButton->Location = System::Drawing::Point(673, 107);
+      this->WishlistButton->Name = L"WishlistButton";
+      this->WishlistButton->Size = System::Drawing::Size(87, 30);
+      this->WishlistButton->TabIndex = 5;
+      this->WishlistButton->Text = L"Wishlist";
+      this->WishlistButton->UseVisualStyleBackColor = true;
+      // 
+      // CartButton
+      // 
+      this->CartButton->Anchor = System::Windows::Forms::AnchorStyles::Top;
+      this->CartButton->AutoSize = true;
+      this->CartButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+        static_cast<System::Byte>(204)));
+      this->CartButton->Location = System::Drawing::Point(766, 107);
+      this->CartButton->Name = L"CartButton";
+      this->CartButton->Size = System::Drawing::Size(87, 30);
+      this->CartButton->TabIndex = 6;
+      this->CartButton->Text = L"Cart";
+      this->CartButton->UseVisualStyleBackColor = true;
+      // 
       // MainClientForm
       // 
       this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
       this->ClientSize = System::Drawing::Size(1182, 653);
+      this->Controls->Add(this->CartButton);
+      this->Controls->Add(this->WishlistButton);
       this->Controls->Add(this->gamesPanel);
       this->Controls->Add(this->SearchGames);
       this->Controls->Add(this->FilterGenre);
@@ -190,6 +227,7 @@ namespace GameStore_Application {
       this->Name = L"MainClientForm";
       this->Text = L"MainClientForm";
       this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
+      this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MainClientForm::MainClientForm_FormClosing);
       this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MainClientForm::MainClientForm_FormClosed);
       this->Load += gcnew System::EventHandler(this, &MainClientForm::MainClientForm_Load);
       this->menuStrip1->ResumeLayout(false);
@@ -201,25 +239,16 @@ namespace GameStore_Application {
 #pragma endregion
   private: System::Void MainClientForm_Load(System::Object^ sender, System::EventArgs^ e) {
 
-    std::string login = MyClient->get_login();
-    int balance = MyClient->get_balance();
-
-    System::String^ loginStr = gcnew System::String(login.c_str());
-
-    System::String^ displayText = System::String::Format("{0} ({1} rub)", loginStr, balance);
-
-    System::String^ displayText2 = System::String::Format(" ({0} rub)", balance);
-
+    UpdateBalance();
     this->gamesPanel->Size = System::Drawing::Size(this->Width - 35, this->Height - 165);
 
-    this->nameBalanceToolStripMenuItem->Text = displayText;
-    this->myWalletToolStripMenuItem->Text += displayText2;
   }
   private: System::Void MainClientForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
-    this->Owner->BeginInvoke(gcnew GameStore_Application::Action(this->Owner, &Form::Close));
   }
+
   private: System::Void myProfileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
   }
+
   private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
   }
 
@@ -295,7 +324,7 @@ namespace GameStore_Application {
       //UpdateBalanceDisplay();
     }
     else {
-      MessageBox::Show("Недостаточно средств!", "Ошибка");
+      MessageBox::Show("Not enough funds!", "Operation Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
     }
   }
 
@@ -319,12 +348,16 @@ namespace GameStore_Application {
       }
     }
   }
+
   private: Void GameCard_Click(Object^ sender, EventArgs^ e)
   {
     this->searchBox->Visible = false;
     this->SearchGames->Visible = false;
     this->gamesPanel->Visible = false;
     this->FilterGenre->Visible = false;
+    this->CartButton->Visible = false;
+    this->WishlistButton->Visible = false;
+
     gameInfoPanel = gcnew Panel();
     gameInfoPanel->Size = System::Drawing::Size(this->Width - 50, this->Height - 75);
     gameInfoPanel->Margin = System::Windows::Forms::Padding(10);
@@ -513,6 +546,7 @@ namespace GameStore_Application {
   private: Void Card_MouseEnter(Object^ sender, EventArgs^ e) {
     safe_cast<Panel^>(sender)->BackColor = Color::LightGray;
   }
+
   private: Void Card_MouseLeave(Object^ sender, EventArgs^ e) {
     safe_cast<Panel^>(sender)->BackColor = Color::WhiteSmoke;
   }
@@ -545,12 +579,15 @@ namespace GameStore_Application {
     this->SearchGames->Visible = true;
     this->gamesPanel->Visible = true;
     this->FilterGenre->Visible = true;
+    this->CartButton->Visible = true;
+    this->WishlistButton->Visible = true;
 
     if (gameInfoPanel->Parent != nullptr) {
       this->Controls->Remove(gameInfoPanel);
       delete gameInfoPanel;
     }
   }
+
   private: Void AddFeedback_Click(System::Object^ sender, EventArgs^ e) {
     RichTextBox^ rtb = nullptr;
     for each (Control ^ ctrl in gameInfoPanel->Controls) {
@@ -588,7 +625,7 @@ namespace GameStore_Application {
       }
     }
     if (rating == 0) {
-      MessageBox::Show("Please, choose a rating");
+      MessageBox::Show("Please, choose a rating", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
       return;
     }
 
@@ -598,8 +635,139 @@ namespace GameStore_Application {
     IntPtr ptr = (IntPtr)gameInfoPanel->Tag;
     Game* game = (Game*)ptr.ToPointer();
     game->addFeedback(user_feedback);
-    MessageBox::Show("Отзыв успешно добавлен");
+    MessageBox::Show("Feedback successfully added", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
   }
 
+  private: System::Void signOutOfAccountToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+    closeOwner = false;
+    this->Close();
+  }
+
+  private: System::Void MainClientForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+    if (closeOwner && this->Owner != nullptr) {
+      Application::Exit();
+    }
+    else {
+      this->Owner->Show();
+    }
+  }
+
+  private: System::Void myWalletToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->searchBox->Visible = false;
+    this->SearchGames->Visible = false;
+    this->gamesPanel->Visible = false;
+    this->FilterGenre->Visible = false;
+    this->CartButton->Visible = false;
+    this->WishlistButton->Visible = false;
+
+   
+    if (gameInfoPanel != nullptr && gameInfoPanel->Parent != nullptr) {
+      this->Controls->Remove(gameInfoPanel);
+      delete gameInfoPanel;
+    }
+   
+
+    myWalletInfoPanel = gcnew Panel();
+    myWalletInfoPanel->Size = System::Drawing::Size(this->Width - 50, this->Height - 75);
+    myWalletInfoPanel->Margin = System::Windows::Forms::Padding(10);
+    myWalletInfoPanel->Location = Point(12, 25);
+    myWalletInfoPanel->AutoScroll = true;
+    this->Controls->Add(myWalletInfoPanel);
+
+    Button^ backButton = gcnew Button();
+    backButton->Text = L"Back";
+    backButton->Size = System::Drawing::Size(80, 30);
+    backButton->Location = Point(10, 10);
+    backButton->Click += gcnew EventHandler(this, &MainClientForm::BackButtonMyWallet_Click);
+    myWalletInfoPanel->Controls->Add(backButton);
+
+    Label^ mainLabel = gcnew Label();
+    mainLabel->Text = "ADD FUNDS TO YOUR WALLET";
+    mainLabel->Font = gcnew System::Drawing::Font("Arial", 24, FontStyle::Bold);
+    mainLabel->AutoSize = false;
+    mainLabel->Size = System::Drawing::Size(myWalletInfoPanel->ClientSize.Width, 50);
+    mainLabel->TextAlign = ContentAlignment::MiddleLeft;
+    mainLabel->Location = Point(100, 20);
+    myWalletInfoPanel->Controls->Add(mainLabel);
+
+    array<int>^ amounts = gcnew array<int> {150, 300, 750, 1500, 3000};
+    int startY = 100;
+    int spacingY = 50;
+
+    for (int i = 0; i < amounts->Length; i++) {
+      int amount = amounts[i];
+
+      Panel^ box = gcnew Panel();
+      box->Text = "";
+      box->Size = System::Drawing::Size(280, 50);
+      box->Location = Point(20, startY + i * (spacingY + 10));
+      box->BorderStyle = BorderStyle::FixedSingle;
+      box->BackColor = Color::LightGray;
+      myWalletInfoPanel->Controls->Add(box);
+
+
+      Label^ lbl = gcnew Label();
+      lbl->Text = String::Format(L"{0} rub.", amount);
+      lbl->Font = gcnew System::Drawing::Font("Arial", 14, FontStyle::Regular);
+      lbl->Location = Point(10, 15);
+      lbl->AutoSize = true;
+      box->Controls->Add(lbl);
+
+      Button^ btnAdd = gcnew Button();
+      btnAdd->Text = L"Add funds";
+      btnAdd->Location = Point(150, 10);
+      btnAdd->BackColor = Color::LightGreen;
+      btnAdd->Size = System::Drawing::Size(120, 30);
+
+      btnAdd->Tag = amount;
+      btnAdd->Click += gcnew EventHandler(this, &MainClientForm::AddFunds_Click);
+      box->Controls->Add(btnAdd);
+    }
+  }
+
+  private: Void BackButtonMyWallet_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->searchBox->Visible = true;
+    this->SearchGames->Visible = true;
+    this->gamesPanel->Visible = true;
+    this->FilterGenre->Visible = true;
+    this->CartButton->Visible = true;
+    this->WishlistButton->Visible = true;
+
+    if (myWalletInfoPanel->Parent != nullptr) {
+      this->Controls->Remove(myWalletInfoPanel);
+      delete myWalletInfoPanel;
+    }
+  }
+
+  private: System::Void AddFunds_Click(System::Object^ sender, EventArgs^ e) {
+    Button^ btn = safe_cast<Button^>(sender);
+    int amount = safe_cast<int>(btn->Tag);
+
+    GameStore_Application::ReplenishmentForm^ ReplenishmentForm = gcnew GameStore_Application::ReplenishmentForm(MyClient, &amount);
+    ReplenishmentForm->Owner = this;
+
+    ReplenishmentForm->FormClosed += gcnew FormClosedEventHandler(this, &MainClientForm::ReplenishmentForm_Closed);
+
+    ReplenishmentForm->Show();
+
+  }
+
+  private: System::Void ReplenishmentForm_Closed(System::Object^ sender, FormClosedEventArgs^ e) {
+    UpdateBalance();
+  }
+
+  void UpdateBalance() {
+
+    std::string login = MyClient->get_login();
+    int balance = MyClient->get_balance();
+
+    System::String^ loginStr = gcnew System::String(login.c_str());
+
+    System::String^ displayText = System::String::Format("{0} ({1} rub)", loginStr, balance);
+    System::String^ displayText2 = System::String::Format("My wallet ({0} rub)", balance);
+
+    this->nameBalanceToolStripMenuItem->Text = displayText;
+    this->myWalletToolStripMenuItem->Text = displayText2;
+  }
 };
 }

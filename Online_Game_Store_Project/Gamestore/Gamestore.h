@@ -47,9 +47,14 @@ public:
 
   bool save_users(const std::string& filename) const;
 
+  size_t find_available_user_id();
+
   void print_users() const;
 
   void print_games() const;
+private:
+  static std::string escape_csv_text(const std::string& text);
+  std::string read_csv_field(std::stringstream& ss);
 };
 
 #endif  // ONLINE_GAME_STORE_PROJECT_GAMESTORE_GAMESTORE_H_
