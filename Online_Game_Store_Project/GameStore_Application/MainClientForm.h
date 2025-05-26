@@ -38,6 +38,7 @@ namespace GameStore_Application {
   private: Panel^ cartinfoPanel = nullptr;
   private: Panel^ gameInfoPanel = nullptr;
   private: Panel^ myWalletInfoPanel = nullptr;
+  private: Panel^ myProfileInfoPanel = nullptr;
   private: bool closeOwner = true;
   private: System::Windows::Forms::Button^ WishlistButton;
   private: System::Windows::Forms::Button^ CartButton;
@@ -248,10 +249,166 @@ namespace GameStore_Application {
     this->gamesPanel->Size = System::Drawing::Size(this->Width - 35, this->Height - 165);
 
   }
+
   private: System::Void MainClientForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
   }
 
   private: System::Void myProfileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+    int width = searchBox->Width;
+    width += SearchGames->Width;
+    Point pos = searchBox->Location;
+    this->searchBox->Visible = false;
+    this->SearchGames->Visible = false;
+    this->gamesPanel->Visible = false;
+    this->FilterGenre->Visible = false;
+    this->CartButton->Visible = false;
+    this->WishlistButton->Visible = false;
+
+    if (cartinfoPanel != nullptr) {
+      this->Controls->Remove(cartinfoPanel);
+      delete cartinfoPanel;
+    }
+
+    if (gameInfoPanel != nullptr && gameInfoPanel->Parent != nullptr) {
+      this->Controls->Remove(gameInfoPanel);
+      delete gameInfoPanel;
+    }
+
+    if (myWalletInfoPanel != nullptr) {
+      this->Controls->Remove(myWalletInfoPanel);
+      delete myWalletInfoPanel;
+    }
+
+    myProfileInfoPanel = gcnew Panel();
+    myProfileInfoPanel->Size = System::Drawing::Size(width, this->Height - 100);
+    myProfileInfoPanel->Margin = System::Windows::Forms::Padding(10);
+    myProfileInfoPanel->Location = pos;
+    myProfileInfoPanel->AutoScroll = true;
+    this->Controls->Add(myProfileInfoPanel);
+
+    Button^ backButton = gcnew Button();
+    backButton->Text = L"Back";
+    backButton->Size = System::Drawing::Size(80, 30);
+    backButton->Location = Point(10, 10);
+    backButton->Click += gcnew EventHandler(this, &MainClientForm::BackButtonMyProfile_Click);
+    myProfileInfoPanel->Controls->Add(backButton);
+
+    Label^ lableprofile = gcnew Label();
+    lableprofile->AutoSize = false;
+    lableprofile->Text = "Your Profile";
+    lableprofile->Font = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
+    lableprofile->Location = Point((myProfileInfoPanel->Width) / 2 - 60, 10);
+    lableprofile->TextAlign = ContentAlignment::MiddleCenter;
+    lableprofile->AutoSize = true;
+    myProfileInfoPanel->Controls->Add(lableprofile);
+
+    int currentY = 70;
+
+    Label^ lablelogin = gcnew Label();
+    lablelogin->AutoSize = false;
+    lablelogin->Text = "Login: " + msclr::interop::marshal_as<System::String^>(MyClient->get_login());
+    lablelogin->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Regular);
+    lablelogin->Location = Point(10, currentY);
+    lablelogin->AutoSize = true;
+    myProfileInfoPanel->Controls->Add(lablelogin);
+
+    Button^ changePasswordButton = gcnew Button();
+    changePasswordButton->Text = L"Change Password";
+    changePasswordButton->Size = System::Drawing::Size(120, 30);
+    changePasswordButton->Location = Point(lablelogin->Width + 20, currentY - 5);
+    //changePasswordButton->Click += gcnew EventHandler(this, &MainClientForm::ChangePasswordButton_Click);
+    myProfileInfoPanel->Controls->Add(changePasswordButton);
+
+    currentY += lablelogin->Height + 15;
+
+    Label^ lablebalance = gcnew Label();
+    lablebalance->AutoSize = false;
+    int balance = MyClient->get_balance();
+    System::String^ displayText = System::String::Format("{0} rub", balance);
+    lablebalance->Text = "Balance: " + displayText;
+    lablebalance->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Regular);
+    lablebalance->Location = Point(10, currentY);
+    lablebalance->AutoSize = true;
+    myProfileInfoPanel->Controls->Add(lablebalance);
+
+    currentY += lablebalance->Height + 35;
+
+    Label^ lablebPurchases = gcnew Label();
+    lablebPurchases->AutoSize = false;
+    lablebPurchases->Text = "Purchases: ";
+    lablebPurchases->Font = gcnew System::Drawing::Font("Arial", 14, FontStyle::Bold);
+    lablebPurchases->Location = Point(10, currentY);
+    lablebPurchases->AutoSize = true;
+    myProfileInfoPanel->Controls->Add(lablebPurchases);
+
+    currentY += lablebPurchases->Height + 15;
+
+    for (size_t i = 0; i < MyClient->get_purchases().size(); i++) {
+      const Game* game = MyClient->get_purchases()[i];
+
+      Panel^ gameCardinPurchases = CreateGameCardinPurchases(game);
+      gameCardinPurchases->Location = Point(10, currentY);
+      myProfileInfoPanel->Controls->Add(gameCardinPurchases);
+      currentY += gameCardinPurchases->Height + 10;
+    }
+
+  }
+  
+  private: Panel^ CreateGameCardinPurchases(const Game* game) {
+    Panel^ card = gcnew Panel();
+    card->Size = System::Drawing::Size(myProfileInfoPanel->Width - 30, 160);
+    card->BorderStyle = BorderStyle::FixedSingle;
+
+    Game* gameptr = const_cast<Game*>(game);
+    IntPtr ptr(gameptr);
+    card->Tag = ptr;
+    card->Margin = System::Windows::Forms::Padding(7);
+
+    card->BackColor = Color::WhiteSmoke;
+    card->Cursor = Cursors::Hand;
+
+    int currentX = 300;
+
+    PictureBox^ pb = gcnew PictureBox();
+
+    pb->AutoSize = true;
+
+    pb->Location = Point(10, 10);
+
+    System::String^ gameTitle = msclr::interop::marshal_as<System::String^>(game->get_title());
+
+    System::String^ imagesFolder = "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Images";
+
+    System::String^ imagePath = System::IO::Path::Combine(imagesFolder, gameTitle + " mid.jpg");
+
+    if (System::IO::File::Exists(imagePath)) {
+      pb->Image = Image::FromFile(imagePath);
+      card->Controls->Add(pb);
+    }
+
+    Label^ title = gcnew Label();
+    title->AutoSize = true;
+    title->Text = msclr::interop::marshal_as<System::String^>(game->get_title());
+    title->Location = Point(currentX + 10, 20);
+    title->Font = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+
+    card->Controls->Add(title);
+
+    return card;
+  }
+
+  private: Void BackButtonMyProfile_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->searchBox->Visible = true;
+    this->SearchGames->Visible = true;
+    this->gamesPanel->Visible = true;
+    this->FilterGenre->Visible = true;
+    this->CartButton->Visible = true;
+    this->WishlistButton->Visible = true;
+
+    if (myProfileInfoPanel != nullptr) {
+      this->Controls->Remove(myProfileInfoPanel);
+      delete myProfileInfoPanel;
+    }
   }
 
   private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
@@ -330,9 +487,11 @@ namespace GameStore_Application {
     Game* game = (Game*)ptr.ToPointer();
 
     if (MyClient->get_balance() >= game->get_price()) {
-      // MyClient->PurchaseGame(game);
+      MyClient->add_purchase(game);
+      int balance = MyClient->get_balance() - game->get_price();
+      MyClient->set_balance(balance);
       MessageBox::Show("Thanks for the purchase!", "Succes", MessageBoxButtons::OK, MessageBoxIcon::Information);
-      //UpdateBalanceDisplay();
+      UpdateBalance();
     }
     else {
       MessageBox::Show("Not enough funds!", "Operation Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
@@ -684,6 +843,11 @@ namespace GameStore_Application {
       delete gameInfoPanel;
     }
 
+    if (myProfileInfoPanel != nullptr) {
+      this->Controls->Remove(myProfileInfoPanel);
+      delete myProfileInfoPanel;
+    }
+
     myWalletInfoPanel = gcnew Panel();
     myWalletInfoPanel->Size = System::Drawing::Size(this->Width - 50, this->Height - 75);
     myWalletInfoPanel->Margin = System::Windows::Forms::Padding(10);
@@ -827,6 +991,7 @@ namespace GameStore_Application {
 
 
     int currentY = 50;
+    int be = 0;
     for (size_t i = 0; i < MyClient->get_basket().size(); i++) {
       const Game* game = MyClient->get_basket()[i];
 
@@ -834,6 +999,153 @@ namespace GameStore_Application {
       gameCardinCart->Location = Point(10, currentY);
       cartinfoPanel->Controls->Add(gameCardinCart);
       currentY += gameCardinCart->Height + 10;
+      be += 1;
+    }
+
+    if (be > 1) {
+      Button^ buyAllButton = gcnew Button();
+      buyAllButton->Name = "buyAllButton";
+      buyAllButton->Text = "Buy All";
+      buyAllButton->Location = Point(10, currentY);
+      buyAllButton->Click += gcnew EventHandler(this, &MainClientForm::BuyAllGame);
+      cartinfoPanel->Controls->Add(buyAllButton);
+
+      Button^ RemoveAllButton = gcnew Button();
+      RemoveAllButton->Name = "RemoveAllButton";
+      RemoveAllButton->Text = "Remove All";
+      RemoveAllButton->Location = Point(cartinfoPanel->Width - 93, currentY);
+      RemoveAllButton->Click += gcnew EventHandler(this, &MainClientForm::RemoveAllGame);
+      cartinfoPanel->Controls->Add(RemoveAllButton);
+    }
+  }
+
+  private: Void RemoveAllGame(Object^ sender, EventArgs^ e) {
+    for (size_t i = 0; i < MyClient->get_basket().size(); i++) {
+      MyClient->remove_basket(MyClient->get_basket()[i]);
+    }
+
+    System::Collections::Generic::List<Control^>^ controlsToRemove = gcnew System::Collections::Generic::List<Control^>();
+    for each (Control ^ ctrl in cartinfoPanel->Controls) {
+      if (ctrl->Tag != nullptr || ctrl->Name == "buyAllButton" || ctrl->Name == "RemoveAllButton") {
+        controlsToRemove->Add(ctrl);
+      }
+    }
+
+    for each (Control ^ ctrl in controlsToRemove) {
+      cartinfoPanel->Controls->Remove(ctrl);
+      delete ctrl;
+    }
+
+  }
+
+  private: Void BuyAllGame(Object^ sender, EventArgs^ e) {
+     int amount = 0;
+     for (size_t i = 0; i < MyClient->get_basket().size(); i++) {
+       amount += (MyClient->get_basket())[i]->get_price();
+     }
+
+     if (MyClient->get_balance() >= amount) {
+       auto basket = MyClient->get_basket();
+
+       for (size_t i = 0; i < basket.size(); i++) {
+         MyClient->add_purchase(basket[i]);
+       }
+
+       for (size_t i = 0; i < basket.size(); i++) {
+         MyClient->remove_basket(basket[i]);
+       }
+
+       int balance = MyClient->get_balance() - amount;
+       MyClient->set_balance(balance);
+       MessageBox::Show("Thanks for the purchases!", "Succes", MessageBoxButtons::OK, MessageBoxIcon::Information);
+       UpdateBalance();
+
+       System::Collections::Generic::List<Control^>^ controlsToRemove = gcnew System::Collections::Generic::List<Control^>();
+       for each (Control ^ ctrl in cartinfoPanel->Controls) {
+         if (ctrl->Tag != nullptr || ctrl->Name == "buyAllButton" || ctrl->Name == "RemoveAllButton") {
+           controlsToRemove->Add(ctrl);
+         }
+       }
+
+       for each (Control ^ ctrl in controlsToRemove) {
+         cartinfoPanel->Controls->Remove(ctrl);
+         delete ctrl;
+       }
+
+     }
+     else {
+       MessageBox::Show("Not enough funds!", "Operation Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+     }
+   }
+
+  private: Void BuyGameinCart(Object^ sender, EventArgs^ e) {
+    Button^ button = safe_cast<Button^>(sender);
+    IntPtr ptr = (IntPtr)button->Tag;
+    Game* game = (Game*)ptr.ToPointer();
+
+    if (MyClient->get_balance() >= game->get_price()) {
+      MyClient->add_purchase(game);
+      int balance = MyClient->get_balance() - game->get_price();
+      MyClient->set_balance(balance);
+
+      MyClient->remove_basket(game);
+
+      Panel^ panelToRemove = nullptr;
+      for each (Control ^ ctrl in cartinfoPanel->Controls) {
+        if (ctrl->Tag != nullptr && (IntPtr)ctrl->Tag == ptr) {
+          panelToRemove = safe_cast<Panel^>(ctrl);
+          break;
+        }
+      }
+
+      if (panelToRemove != nullptr) {
+        cartinfoPanel->Controls->Remove(panelToRemove);
+        delete panelToRemove;
+
+        int currentY = 50;
+        int fixedY = 0;
+        System::Collections::Generic::List<Control^>^ controlsToRemove = gcnew System::Collections::Generic::List<Control^>();
+        for each (Control ^ ctrl in cartinfoPanel->Controls) {
+          if (ctrl->Tag != nullptr || ctrl->Name == "buyAllButton" || ctrl->Name == "RemoveAllButton") {
+            if ((ctrl->Name == "buyAllButton" || ctrl->Name == "RemoveAllButton") && MyClient->get_basket().size() < 2) {
+              controlsToRemove->Add(ctrl);
+            }
+            else {
+              ctrl->Location = Point(10, currentY);
+              if (ctrl->Name == "buyAllButton") {
+                if (fixedY != 0) {
+                  ctrl->Location = Point(10, fixedY);
+                }
+                else {
+                  ctrl->Location = Point(10, currentY);
+                  fixedY = currentY;
+                }
+                
+              }
+              if (ctrl->Name == "RemoveAllButton") {
+                if (fixedY != 0) {
+                  ctrl->Location = Point(cartinfoPanel->Width - ctrl->Width - 10, fixedY);
+                }
+                else {
+                  ctrl->Location = Point(cartinfoPanel->Width - ctrl->Width - 10, currentY);
+                  fixedY = currentY;
+                }
+              }
+              currentY += ctrl->Height + 10;
+            }
+          }
+        }
+
+        for each (Control ^ ctrl in controlsToRemove) {
+          cartinfoPanel->Controls->Remove(ctrl);
+          delete ctrl;
+        }
+      }
+      MessageBox::Show("Thanks for the purchase!", "Succes", MessageBoxButtons::OK, MessageBoxIcon::Information);
+      UpdateBalance();
+    }
+    else {
+      MessageBox::Show("Not enough funds!", "Operation Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
     }
   }
 
@@ -853,7 +1165,7 @@ namespace GameStore_Application {
 
   private: Panel^ CreateGameCardinCart(const Game* game) {
     Panel^ card = gcnew Panel();
-    card->Size = System::Drawing::Size(cartinfoPanel->Width - 20, 160);
+    card->Size = System::Drawing::Size(cartinfoPanel->Width - 30, 160);
     card->BorderStyle = BorderStyle::FixedSingle;
 
     Game* gameptr = const_cast<Game*>(game);
@@ -876,7 +1188,7 @@ namespace GameStore_Application {
 
     System::String^ imagesFolder = "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Images";
 
-    System::String^ imagePath = System::IO::Path::Combine(imagesFolder, gameTitle + " Cart.jpg");
+    System::String^ imagePath = System::IO::Path::Combine(imagesFolder, gameTitle + " mid.jpg");
 
     if (System::IO::File::Exists(imagePath)) {
       pb->Image = Image::FromFile(imagePath);
@@ -897,7 +1209,7 @@ namespace GameStore_Application {
     Button^ buyButton = gcnew Button();
     buyButton->Text = "Buy";
     buyButton->Location = Point(card->Width - 160, card->Height - 30);
-    buyButton->Click += gcnew EventHandler(this, &MainClientForm::BuyGame);
+    buyButton->Click += gcnew EventHandler(this, &MainClientForm::BuyGameinCart);
     buyButton->Tag = ptr;
 
     Button^ RemoveButton = gcnew Button();
@@ -944,11 +1256,42 @@ namespace GameStore_Application {
       delete panelToRemove;
 
       int currentY = 50;
+      int fixedY = 0;
+      System::Collections::Generic::List<Control^>^ controlsToRemove = gcnew System::Collections::Generic::List<Control^>();
       for each (Control ^ ctrl in cartinfoPanel->Controls) {
-        if (ctrl->Tag != nullptr) {
-          ctrl->Location = Point(10, currentY);
-          currentY += ctrl->Height + 10;
+        if (ctrl->Tag != nullptr || ctrl->Name == "buyAllButton" || ctrl->Name == "RemoveAllButton") {
+          if ((ctrl->Name == "buyAllButton" || ctrl->Name == "RemoveAllButton") && MyClient->get_basket().size() < 2) {
+            controlsToRemove->Add(ctrl);
+          }
+          else {
+            ctrl->Location = Point(10, currentY);
+            if (ctrl->Name == "buyAllButton") {
+              if (fixedY != 0) {
+                ctrl->Location = Point(10, fixedY);
+              }
+              else {
+                ctrl->Location = Point(10, currentY);
+                fixedY = currentY;
+              }
+
+            }
+            if (ctrl->Name == "RemoveAllButton") {
+              if (fixedY != 0) {
+                ctrl->Location = Point(cartinfoPanel->Width - ctrl->Width - 10, fixedY);
+              }
+              else {
+                ctrl->Location = Point(cartinfoPanel->Width - ctrl->Width - 10, currentY);
+                fixedY = currentY;
+              }
+            }
+            currentY += ctrl->Height + 10;
+          }
         }
+      }
+
+      for each (Control ^ ctrl in controlsToRemove) {
+        cartinfoPanel->Controls->Remove(ctrl);
+        delete ctrl;
       }
     }
 
