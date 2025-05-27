@@ -53,7 +53,6 @@ public:
 
   void print_games() const;
 private:
-  static std::string escape_csv_text(const std::string& text);
   std::string read_csv_field(std::stringstream& ss);
 };
 

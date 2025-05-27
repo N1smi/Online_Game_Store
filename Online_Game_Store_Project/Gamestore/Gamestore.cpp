@@ -1,4 +1,4 @@
-// Copyright 2025 Smirnov Nikita
+п»ї// Copyright 2025 Smirnov Nikita
 
 #include <fstream>
 #include <sstream>
@@ -292,8 +292,20 @@ bool GameStore::save_games(const std::string& filename) const {
     const auto& feedbacks = _games[i].get_feedbacks();
     for (size_t j = 0; j < _games[i].get_feedbacks().size(); j++) {
       const auto& feedback = feedbacks[j];
+
+      std::string feedback_text = feedback->get_text();
+      if (feedback_text.find(',') != std::string::npos ||
+        feedback_text.find('"') != std::string::npos) {
+        size_t pos = 0;
+        while ((pos = feedback_text.find('"', pos)) != std::string::npos) {
+          feedback_text.replace(pos, 1, "\"\"");
+          pos += 2;
+        }
+        feedback_text = "\"" + feedback_text + "\"";
+      }
+
       file << feedback->get_client_id() << ","
-        <<  escape_csv_text(feedback->get_text()) << ","
+        << feedback_text << ","
         << feedback->get_assessment() << ";";
     }
     file << "\n";
@@ -490,48 +502,28 @@ void GameStore::print_games() const {
   }
 }
 
-std::string GameStore::escape_csv_text(const std::string& text) {
-  std::string escaped = "\"";
-  for (char c : text) {
-    if (c == '\"') {
-      escaped += "\"\""; // Экранирование кавычек
-    }
-    else {
-      escaped += c;
-    }
-  }
-  escaped += "\"";
-  return escaped;
-}
-
 std::string GameStore::read_csv_field(std::stringstream& ss) {
   std::string field;
-  if (ss.peek() == '\"') {
-    // Поле в кавычках
-    ss.get(); // Удаляем начальную кавычку
-    while (true) {
-      char c = ss.get();
-      if (c == '\"') {
-        if (ss.peek() == '\"') {
-          // Экранированная кавычка
-          field += '\"';
-          ss.get(); // Удаляем вторую кавычку
-        }
-        else {
-          // Конец поля
-          break;
-        }
+  char ch;
+  bool in_quotes = false;
+
+  while (ss.get(ch)) {
+    if (ch == '"') {
+      if (in_quotes && ss.peek() == '"') {
+        field += '"';
+        ss.get(ch);
       }
       else {
-        field += c;
+        in_quotes = !in_quotes;
       }
     }
-    // После закрывающей кавычки обычно идет запятая или конец строки
-    if (ss.peek() == ',') ss.get(); // Удаляем запятую, если есть
+    else if ((ch == ',' || ch == ';') && !in_quotes) {
+      break;
+    }
+    else {
+      field += ch;
+    }
   }
-  else {
-    // Поле без кавычек
-    std::getline(ss, field, ',');
-  }
+
   return field;
 }

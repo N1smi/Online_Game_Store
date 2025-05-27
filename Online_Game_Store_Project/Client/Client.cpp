@@ -69,3 +69,12 @@ void Client::remove_basket(Game* game) {
     }
   }
 }
+
+void Client::remove_desired(Game* game) {
+  for (size_t i = 0; i < _desired.size(); i++) {
+    if (_desired[i] == game) {
+      _desired.erase(i);
+      break;
+    }
+  }
+}

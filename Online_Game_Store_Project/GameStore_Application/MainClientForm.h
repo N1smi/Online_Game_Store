@@ -1,6 +1,7 @@
-#pragma once
+п»ї#pragma once
 
 #include "ReplenishmentForm.h"
+#include "PasswordРЎhangeForm.h"
 
 namespace GameStore_Application {
 
@@ -13,7 +14,7 @@ namespace GameStore_Application {
   using namespace msclr::interop;
 
   /// <summary>
-  /// Сводка для MainClientForm
+  /// РЎРІРѕРґРєР° РґР»СЏ MainClientForm
   /// </summary>
   public ref class MainClientForm : public System::Windows::Forms::Form
   {
@@ -36,10 +37,13 @@ namespace GameStore_Application {
 
 
   private: Panel^ cartinfoPanel = nullptr;
+  private: Panel^ wishlistinfoPanel = nullptr;
   private: Panel^ gameInfoPanel = nullptr;
   private: Panel^ myWalletInfoPanel = nullptr;
   private: Panel^ myProfileInfoPanel = nullptr;
   private: bool closeOwner = true;
+  private: bool isMyWalletOpen = false;
+  private: bool isMyProfileOpen = false;
   private: System::Windows::Forms::Button^ WishlistButton;
   private: System::Windows::Forms::Button^ CartButton;
   public:
@@ -51,13 +55,13 @@ namespace GameStore_Application {
 
       InitializeComponent();
       //
-      //TODO: добавьте код конструктора
+      //TODO: РґРѕР±Р°РІСЊС‚Рµ РєРѕРґ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°
       //
     }
 
   protected:
     /// <summary>
-    /// Освободить все используемые ресурсы.
+    /// РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµСЃСѓСЂСЃС‹.
     /// </summary>
     ~MainClientForm()
     {
@@ -71,14 +75,14 @@ namespace GameStore_Application {
 
   private:
     /// <summary>
-    /// Обязательная переменная конструктора.
+    /// РћР±СЏР·Р°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°.
     /// </summary>
 
 
 #pragma region Windows Form Designer generated code
     /// <summary>
-    /// Требуемый метод для поддержки конструктора — не изменяйте 
-    /// содержимое этого метода с помощью редактора кода.
+    /// РўСЂРµР±СѓРµРјС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° вЂ” РЅРµ РёР·РјРµРЅСЏР№С‚Рµ 
+    /// СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ РјРµС‚РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґР°РєС‚РѕСЂР° РєРѕРґР°.
     /// </summary>
     void InitializeComponent(void)
     {
@@ -157,10 +161,16 @@ namespace GameStore_Application {
       this->FilterGenre->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
         static_cast<System::Byte>(204)));
       this->FilterGenre->FormattingEnabled = true;
-      this->FilterGenre->Location = System::Drawing::Point(859, 109);
+      this->FilterGenre->Items->AddRange(gcnew cli::array< System::Object^  >(18) {
+        L"All Genre", L"Shooter", L"Battle Royale", L"Role Play",
+          L"Strategy", L"Simulator", L"Horror", L"Races", L"Casual", L"Adventure", L"Survival", L"Sandbox", L"Action", L"RPG", L"Open World",
+          L"MMORPG", L"Sports", L"Platform"
+      });
+      this->FilterGenre->Location = System::Drawing::Point(905, 107);
       this->FilterGenre->Name = L"FilterGenre";
-      this->FilterGenre->Size = System::Drawing::Size(187, 28);
+      this->FilterGenre->Size = System::Drawing::Size(149, 28);
       this->FilterGenre->TabIndex = 2;
+      this->FilterGenre->Text = L"All Genre";
       this->FilterGenre->SelectedIndexChanged += gcnew System::EventHandler(this, &MainClientForm::comboBox1_SelectedIndexChanged);
       // 
       // SearchGames
@@ -193,7 +203,7 @@ namespace GameStore_Application {
       this->WishlistButton->AutoSize = true;
       this->WishlistButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
         static_cast<System::Byte>(204)));
-      this->WishlistButton->Location = System::Drawing::Point(673, 107);
+      this->WishlistButton->Location = System::Drawing::Point(719, 105);
       this->WishlistButton->Name = L"WishlistButton";
       this->WishlistButton->Size = System::Drawing::Size(87, 30);
       this->WishlistButton->TabIndex = 5;
@@ -207,7 +217,7 @@ namespace GameStore_Application {
       this->CartButton->AutoSize = true;
       this->CartButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
         static_cast<System::Byte>(204)));
-      this->CartButton->Location = System::Drawing::Point(766, 107);
+      this->CartButton->Location = System::Drawing::Point(812, 105);
       this->CartButton->Name = L"CartButton";
       this->CartButton->Size = System::Drawing::Size(87, 30);
       this->CartButton->TabIndex = 6;
@@ -229,7 +239,6 @@ namespace GameStore_Application {
       this->Controls->Add(this->menuStrip1);
       this->MainMenuStrip = this->menuStrip1;
       this->MaximizeBox = false;
-      this->MinimizeBox = false;
       this->Name = L"MainClientForm";
       this->Text = L"MainClientForm";
       this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
@@ -254,6 +263,9 @@ namespace GameStore_Application {
   }
 
   private: System::Void myProfileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+    if (isMyProfileOpen == true) return;
+    isMyWalletOpen = false;
+    isMyProfileOpen = true;
     int width = searchBox->Width;
     width += SearchGames->Width;
     Point pos = searchBox->Location;
@@ -263,6 +275,11 @@ namespace GameStore_Application {
     this->FilterGenre->Visible = false;
     this->CartButton->Visible = false;
     this->WishlistButton->Visible = false;
+
+    if (wishlistinfoPanel != nullptr) {
+      this->Controls->Remove(wishlistinfoPanel);
+      delete wishlistinfoPanel;
+    }
 
     if (cartinfoPanel != nullptr) {
       this->Controls->Remove(cartinfoPanel);
@@ -316,7 +333,7 @@ namespace GameStore_Application {
     changePasswordButton->Text = L"Change Password";
     changePasswordButton->Size = System::Drawing::Size(120, 30);
     changePasswordButton->Location = Point(lablelogin->Width + 20, currentY - 5);
-    //changePasswordButton->Click += gcnew EventHandler(this, &MainClientForm::ChangePasswordButton_Click);
+    changePasswordButton->Click += gcnew EventHandler(this, &MainClientForm::ChangePasswordButton_Click);
     myProfileInfoPanel->Controls->Add(changePasswordButton);
 
     currentY += lablelogin->Height + 15;
@@ -352,6 +369,13 @@ namespace GameStore_Application {
       currentY += gameCardinPurchases->Height + 10;
     }
 
+  }
+
+  private: Void ChangePasswordButton_Click(Object^ sender, EventArgs^ e) {
+    GameStore_Application::PasswordРЎhangeForm^ PasswordРЎhangeForm = gcnew GameStore_Application::PasswordРЎhangeForm(MyClient);
+    PasswordРЎhangeForm->Owner = this;
+
+    PasswordРЎhangeForm->Show();
   }
   
   private: Panel^ CreateGameCardinPurchases(const Game* game) {
@@ -398,6 +422,7 @@ namespace GameStore_Application {
   }
 
   private: Void BackButtonMyProfile_Click(System::Object^ sender, System::EventArgs^ e) {
+    isMyProfileOpen = false;
     this->searchBox->Visible = true;
     this->SearchGames->Visible = true;
     this->gamesPanel->Visible = true;
@@ -429,46 +454,73 @@ namespace GameStore_Application {
     card->MouseEnter += gcnew EventHandler(this, &MainClientForm::Card_MouseEnter);
     card->MouseLeave += gcnew EventHandler(this, &MainClientForm::Card_MouseLeave);
 
-    // Название игры
+    int currentY = 116;
+
+    PictureBox^ pb = gcnew PictureBox();
+
+    pb->AutoSize = true;
+
+    pb->Location = Point(10, 10);
+
+    System::String^ gameTitle = msclr::interop::marshal_as<System::String^>(game->get_title());
+
+    System::String^ imagesFolder = "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Images";
+
+    System::String^ imagePath = System::IO::Path::Combine(imagesFolder, gameTitle + " logo.ico");
+
+    if (System::IO::File::Exists(imagePath)) {
+      pb->Image = Image::FromFile(imagePath);
+      card->Controls->Add(pb);
+    }
+
+    // РќР°Р·РІР°РЅРёРµ РёРіСЂС‹
     Label^ title = gcnew Label();
     title->AutoSize = true;
     title->Text = msclr::interop::marshal_as<System::String^>(game->get_title());
     if (title->Text->Length > 30) {
       title->Text = title->Text->Substring(0, 23) + "...";
     }
-    title->Location = Point(10, 10);
+    title->Location = Point(10, currentY);
     title->Font = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
 
-    // Дата
+    currentY += title->Height;
+
+    // Р”Р°С‚Р°
     Label^ data = gcnew Label();
     data->AutoSize = true;
     data->Text = "Released: ";
     data->Text += msclr::interop::marshal_as<System::String^>(game->get_release_date().toString());
-    data->Location = Point(10, 40);
+    data->Location = Point(10, currentY);
 
-    // Рейтинг 
+    currentY += data->Height;
+
+    // Р РµР№С‚РёРЅРі 
     Label^ rating = gcnew Label();
     rating->AutoSize = true;
     rating->Text = "Rating: ";
     rating->Text += String::Format("{0}", game->get_rating());
-    rating->Location = Point(10, 70);
+    rating->Location = Point(10, currentY);
 
-    // Цена
+    currentY += rating->Height + 10;
+
+    // Р¦РµРЅР°
     Label^ price = gcnew Label();
     price->AutoSize = true;
     price->Text = String::Format("{0} rub", game->get_price());
-    price->Location = Point(10, 180);
+    price->Location = Point(10, currentY);
 
-    // Кнопка "Купить"
+    currentY += price->Height + 10;
+
+    // РљРЅРѕРїРєР° "РљСѓРїРёС‚СЊ"
     Button^ buyButton = gcnew Button();
     buyButton->Text = "Buy";
-    buyButton->Location = Point(10, 210);
+    buyButton->Location = Point(10, currentY-20);
     buyButton->Click += gcnew EventHandler(this, &MainClientForm::BuyGame);
     buyButton->Tag = ptr;
 
     Button^ AddtoCart = gcnew Button();
     AddtoCart->Text = "Add to Cart";
-    AddtoCart->Location = Point(110, 210);
+    AddtoCart->Location = Point(110, currentY-20);
     AddtoCart->Click += gcnew EventHandler(this, &MainClientForm::Add_to_Cart);
     AddtoCart->Tag = ptr;
 
@@ -502,17 +554,17 @@ namespace GameStore_Application {
     gamesPanel->Controls->Clear();
 
     String^ searchText = searchBox->Text->ToLower();
-    //String^ selectedGenre = genreFilter->Text;
+    String^ selectedGenre = FilterGenre->Text;
 
 
-    // Фильтрация игр
     for (size_t i = 0; i < (*MyGameStoreCopy).get_all_games_ref().size(); i++) {
       const Game* game = &((*MyGameStoreCopy).get_all_games_ref()[i]);
       String^ titleString = gcnew String(game->get_title().c_str());
-      bool matchesSearch = titleString->ToLower()->Contains(searchText);
-      //bool matchesGenre = (selectedGenre == "Все жанры" || game->Genre == selectedGenre);
 
-      if (matchesSearch/* && matchesGenre*/) {
+      bool matchesSearch = titleString->ToLower()->Contains(searchText);
+      bool matchesGenre = (selectedGenre == "All Genre" || GenreTypeToString((game->get_genre())) == selectedGenre);
+
+      if (matchesSearch && matchesGenre) {
         Panel^ gameCard = CreateGameCard(game);
         gamesPanel->Controls->Add(gameCard);
       }
@@ -712,6 +764,91 @@ namespace GameStore_Application {
     ratingGroup->Location = Point(feedbackLabel2->Width + 20, currentY - 10);
     ratingGroup->Size = System::Drawing::Size(230, 50);
     gameInfoPanel->Controls->Add(ratingGroup);
+
+    currentY += feedbackLabel2->Height + 15;
+
+    Button^ btnAddWishlist = gcnew Button();
+    btnAddWishlist->Text = L"Add to your wishlist";
+    btnAddWishlist->AutoSize = true;
+    btnAddWishlist->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Regular);
+    btnAddWishlist->Size = System::Drawing::Size(120, 30);
+    btnAddWishlist->Location = Point(20, currentY + 5);
+    btnAddWishlist->Tag = ptr;
+    btnAddWishlist->Click += gcnew EventHandler(this, &MainClientForm::AddinWislist_Click);
+    gameInfoPanel->Controls->Add(btnAddWishlist);
+
+    currentY += btnAddWishlist->Height + 30;
+
+    Label^ Allfeedbacks = gcnew Label();
+    Allfeedbacks->Text = "All Feedbacks ";
+    Allfeedbacks->AutoSize = true;
+    Allfeedbacks->Font = gcnew System::Drawing::Font("Arial", 14, FontStyle::Bold);
+    Allfeedbacks->Location = Point(20, currentY);
+    gameInfoPanel->Controls->Add(Allfeedbacks);
+
+    currentY += Allfeedbacks->Height + 10;
+
+    const auto& feedbacks = game->get_feedbacks();
+
+    if (feedbacks.is_empty()) {
+      Label^ noFeedbacksLabel = gcnew Label();
+      noFeedbacksLabel->Text = "No feedbacks yet.";
+      noFeedbacksLabel->AutoSize = true;
+      noFeedbacksLabel->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Regular);
+      noFeedbacksLabel->Location = Point(20, currentY);
+      gameInfoPanel->Controls->Add(noFeedbacksLabel);
+      currentY += noFeedbacksLabel->Height + 10;
+    }
+    else {
+      Panel^ feedbacksPanel = gcnew Panel();
+      feedbacksPanel->Location = Point(20, currentY);
+      feedbacksPanel->Size = System::Drawing::Size(gameInfoPanel->ClientSize.Width - 100, 300);
+      feedbacksPanel->AutoScroll = true;
+      //feedbacksPanel->BorderStyle = BorderStyle::FixedSingle;
+      gameInfoPanel->Controls->Add(feedbacksPanel);
+
+      int feedbackY = 10;
+      for (size_t i = 0; i < feedbacks.size(); i++) {
+        const auto& feedback = feedbacks[i];
+        Label^ userLabel = gcnew Label();
+        userLabel->Text = msclr::interop::marshal_as<System::String^>(feedback->get_client_login()->get_login());
+        userLabel->AutoSize = true;
+        userLabel->Font = gcnew System::Drawing::Font("Arial", 12, FontStyle::Bold);
+        userLabel->Location = Point(10, feedbackY);
+        feedbacksPanel->Controls->Add(userLabel);
+        feedbackY += userLabel->Height + 5;
+
+        Label^ ratingLabel = gcnew Label();
+        ratingLabel->Text = "Rating: " + gcnew String(L'в…', feedback->get_assessment());
+        ratingLabel->AutoSize = true;
+        ratingLabel->Font = gcnew System::Drawing::Font("Arial", 10);
+        ratingLabel->Location = Point(10, feedbackY);
+        feedbacksPanel->Controls->Add(ratingLabel);
+        feedbackY += ratingLabel->Height + 5;
+
+        RichTextBox^ feedbackText = gcnew RichTextBox();
+        feedbackText->Text = msclr::interop::marshal_as<System::String^>(feedback->get_text());
+        feedbackText->ReadOnly = true;
+        feedbackText->BorderStyle = BorderStyle::None;
+        //feedbackText->BackColor = System::Drawing::Color::LightGray;
+        feedbackText->Font = gcnew System::Drawing::Font("Arial", 10);
+        feedbackText->Location = Point(10, feedbackY);
+        feedbackText->Size = System::Drawing::Size(feedbacksPanel->ClientSize.Width - 30, 60);
+        feedbackText->WordWrap = true;
+        feedbacksPanel->Controls->Add(feedbackText);
+        feedbackY += feedbackText->Height + 15;
+
+        Label^ separator = gcnew Label();
+        separator->BorderStyle = BorderStyle::Fixed3D;
+        separator->Height = 2;
+        separator->Width = feedbacksPanel->ClientSize.Width - 20;
+        separator->Location = Point(10, feedbackY);
+        feedbacksPanel->Controls->Add(separator);
+        feedbackY += separator->Height + 10;
+      }
+      currentY += feedbacksPanel->Height + 10;
+    }
+
   }
 
   private: Void Card_MouseEnter(Object^ sender, EventArgs^ e) {
@@ -722,29 +859,30 @@ namespace GameStore_Application {
     safe_cast<Panel^>(sender)->BackColor = Color::WhiteSmoke;
   }
 
-         System::String^ GenreTypeToString(GenreType genre) {
-           switch (genre) {
-           case GenreType::Shooter: return "Shooter";
-           case GenreType::Battle_Royale: return "Battle Royale";
-           case GenreType::Role_Play: return "Role Play";
-           case GenreType::Strategy: return "Strategy";
-           case GenreType::Simulator: return "Simulator";
-           case GenreType::Horror: return "Horror";
-           case GenreType::Races: return "Races";
-           case GenreType::Casual: return "Casual";
-           case GenreType::Adventure: return "Adventure";
-           case GenreType::Survival: return "Survival";
-           case GenreType::Sandbox: return "Sandbox";
-           case GenreType::Action: return "Action";
-           case GenreType::RPG: return "RPG";
-           case GenreType::Open_World: return "Open World";
-           case GenreType::MMORPG: return "MMORPG";
-           case GenreType::TGenre: return "TGenre";
-           case GenreType::Sports: return "Sports";
-           case GenreType::Platform: return "Platform";
-           default: return "Unknown";
-           }
-         }
+  System::String^ GenreTypeToString(GenreType genre) {
+    switch (genre) {
+    case GenreType::Shooter: return "Shooter";
+    case GenreType::Battle_Royale: return "Battle Royale";
+    case GenreType::Role_Play: return "Role Play";
+    case GenreType::Strategy: return "Strategy";
+    case GenreType::Simulator: return "Simulator";
+    case GenreType::Horror: return "Horror";
+    case GenreType::Races: return "Races";
+    case GenreType::Casual: return "Casual";
+    case GenreType::Adventure: return "Adventure";
+    case GenreType::Survival: return "Survival";
+    case GenreType::Sandbox: return "Sandbox";
+    case GenreType::Action: return "Action";
+    case GenreType::RPG: return "RPG";
+    case GenreType::Open_World: return "Open World";
+    case GenreType::MMORPG: return "MMORPG";
+    case GenreType::TGenre: return "TGenre";
+    case GenreType::Sports: return "Sports";
+    case GenreType::Platform: return "Platform";
+    default: return "Unknown";
+    }
+  }
+
   private: Void BackButton_Click(System::Object^ sender, System::EventArgs^ e) {
     this->searchBox->Visible = true;
     this->SearchGames->Visible = true;
@@ -769,7 +907,7 @@ namespace GameStore_Application {
     }
 
     if (rtb == nullptr) {
-      MessageBox::Show("Поле для отзыва не найдено");
+      MessageBox::Show("РџРѕР»Рµ РґР»СЏ РѕС‚Р·С‹РІР° РЅРµ РЅР°Р№РґРµРЅРѕ");
       return;
     }
 
@@ -826,12 +964,20 @@ namespace GameStore_Application {
   }
 
   private: System::Void myWalletToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+    if (isMyWalletOpen == true) return;
+    isMyWalletOpen = true;
+    isMyProfileOpen = false;
     this->searchBox->Visible = false;
     this->SearchGames->Visible = false;
     this->gamesPanel->Visible = false;
     this->FilterGenre->Visible = false;
     this->CartButton->Visible = false;
     this->WishlistButton->Visible = false;
+
+    if (wishlistinfoPanel != nullptr) {
+      this->Controls->Remove(wishlistinfoPanel);
+      delete wishlistinfoPanel;
+    }
 
     if (cartinfoPanel != nullptr) {
       this->Controls->Remove(cartinfoPanel);
@@ -907,6 +1053,7 @@ namespace GameStore_Application {
   }
 
   private: Void BackButtonMyWallet_Click(System::Object^ sender, System::EventArgs^ e) {
+    isMyWalletOpen = false;
     this->searchBox->Visible = true;
     this->SearchGames->Visible = true;
     this->gamesPanel->Visible = true;
@@ -952,7 +1099,139 @@ namespace GameStore_Application {
   }
 
   private: System::Void WishlistButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    int width = searchBox->Width;
+    width += SearchGames->Width;
+    Point pos = searchBox->Location;
+    this->searchBox->Visible = false;
+    this->SearchGames->Visible = false;
+    this->gamesPanel->Visible = false;
+    this->FilterGenre->Visible = false;
+    this->CartButton->Visible = false;
+    this->WishlistButton->Visible = false;
 
+    wishlistinfoPanel = gcnew Panel();
+    wishlistinfoPanel->Size = System::Drawing::Size(width, this->Height - 100);
+    wishlistinfoPanel->Margin = System::Windows::Forms::Padding(10);
+    wishlistinfoPanel->Location = pos;
+    wishlistinfoPanel->AutoScroll = true;
+    this->Controls->Add(wishlistinfoPanel);
+
+    Button^ backButton = gcnew Button();
+    backButton->Text = L"Back";
+    backButton->Size = System::Drawing::Size(80, 30);
+    backButton->Location = Point(10, 10);
+    backButton->Click += gcnew EventHandler(this, &MainClientForm::BackButtonWishlist_Click);
+    wishlistinfoPanel->Controls->Add(backButton);
+
+    Label^ lablewihlist = gcnew Label();
+    lablewihlist->AutoSize = false;
+    lablewihlist->Text = msclr::interop::marshal_as<System::String^>(MyClient->get_login()) + "'s Wishlist";
+    lablewihlist->Font = gcnew System::Drawing::Font("Arial", 16, FontStyle::Bold);
+    lablewihlist->Location = Point((wishlistinfoPanel->Width) / 2 - 110, 10);
+    lablewihlist->TextAlign = ContentAlignment::MiddleCenter;
+    lablewihlist->AutoSize = true;
+    wishlistinfoPanel->Controls->Add(lablewihlist);
+
+    int currentY = 50;
+    for (size_t i = 0; i < MyClient->get_desired().size(); i++) {
+      const Game* game = MyClient->get_desired()[i];
+
+      Panel^ gameCardinWish = CreateGameCardinWish(game);
+      gameCardinWish->Location = Point(10, currentY);
+      wishlistinfoPanel->Controls->Add(gameCardinWish);
+      currentY += gameCardinWish->Height + 10;
+    }
+  }
+
+  private: Panel^ CreateGameCardinWish(const Game* game) {
+    Panel^ card = gcnew Panel();
+    card->Size = System::Drawing::Size(wishlistinfoPanel->Width - 30, 160);
+    card->BorderStyle = BorderStyle::FixedSingle;
+
+    Game* gameptr = const_cast<Game*>(game);
+    IntPtr ptr(gameptr);
+    card->Tag = ptr;
+    card->Margin = System::Windows::Forms::Padding(7);
+
+    card->BackColor = Color::WhiteSmoke;
+    card->Cursor = Cursors::Hand;
+
+    int currentX = 300;
+
+    PictureBox^ pb = gcnew PictureBox();
+
+    pb->AutoSize = true;
+
+    pb->Location = Point(10, 10);
+
+    System::String^ gameTitle = msclr::interop::marshal_as<System::String^>(game->get_title());
+
+    System::String^ imagesFolder = "E:\\GitHub\\Online_Game_Store\\Online_Game_Store_Project\\Images";
+
+    System::String^ imagePath = System::IO::Path::Combine(imagesFolder, gameTitle + " mid.jpg");
+
+    if (System::IO::File::Exists(imagePath)) {
+      pb->Image = Image::FromFile(imagePath);
+      card->Controls->Add(pb);
+    }
+
+    Label^ title = gcnew Label();
+    title->AutoSize = true;
+    title->Text = msclr::interop::marshal_as<System::String^>(game->get_title());
+    title->Location = Point(currentX + 10, 20);
+    title->Font = gcnew System::Drawing::Font("Arial", 10, FontStyle::Bold);
+
+    Label^ price = gcnew Label();
+    price->AutoSize = true;
+    price->Text = String::Format("{0} rub", game->get_price());
+    price->Location = Point(card->Width - 130, card->Height/ 2 - 5);
+
+    Label^ data = gcnew Label();
+    data->AutoSize = true;
+    data->Text = "Released: ";
+    data->Text += msclr::interop::marshal_as<System::String^>(game->get_release_date().toString());
+    data->Location = Point(currentX + 10, 75);
+
+    Label^ rating = gcnew Label();
+    rating->AutoSize = true;
+    rating->Text = "Rating: ";
+    rating->Text += String::Format("{0}", game->get_rating());
+    rating->Location = Point(currentX + 10, 55);
+
+    Button^ RemoveButton = gcnew Button();
+    RemoveButton->Text = "Remove";
+    RemoveButton->Location = Point(card->Width - 80, card->Height - 30);
+    RemoveButton->Click += gcnew EventHandler(this, &MainClientForm::RemoveGameinWish);
+    RemoveButton->Tag = ptr;
+
+    Button^ addToCartButton = gcnew Button();
+    addToCartButton->Text = "Add to Cart";
+    addToCartButton->Location = Point(card->Width - 80, (card->Height / 2) - 10);
+    addToCartButton->Click += gcnew EventHandler(this, &MainClientForm::Add_to_Cart);
+    addToCartButton->Tag = ptr;
+
+    card->Controls->Add(rating);
+    card->Controls->Add(data);
+    card->Controls->Add(title);
+    card->Controls->Add(price);
+    card->Controls->Add(RemoveButton);
+    card->Controls->Add(addToCartButton);
+
+    return card;
+  }
+
+  private: Void BackButtonWishlist_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->searchBox->Visible = true;
+    this->SearchGames->Visible = true;
+    this->gamesPanel->Visible = true;
+    this->FilterGenre->Visible = true;
+    this->CartButton->Visible = true;
+    this->WishlistButton->Visible = true;
+
+    if (wishlistinfoPanel != nullptr) {
+      this->Controls->Remove(wishlistinfoPanel);
+      delete wishlistinfoPanel;
+    }
   }
 
   private: System::Void CartButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -1007,6 +1286,7 @@ namespace GameStore_Application {
       buyAllButton->Name = "buyAllButton";
       buyAllButton->Text = "Buy All";
       buyAllButton->Location = Point(10, currentY);
+      buyAllButton->AutoSize = true;
       buyAllButton->Click += gcnew EventHandler(this, &MainClientForm::BuyAllGame);
       cartinfoPanel->Controls->Add(buyAllButton);
 
@@ -1020,8 +1300,8 @@ namespace GameStore_Application {
   }
 
   private: Void RemoveAllGame(Object^ sender, EventArgs^ e) {
-    for (size_t i = 0; i < MyClient->get_basket().size(); i++) {
-      MyClient->remove_basket(MyClient->get_basket()[i]);
+    while (!MyClient->get_basket().is_empty()) {
+      MyClient->remove_basket(MyClient->get_basket().front());
     }
 
     System::Collections::Generic::List<Control^>^ controlsToRemove = gcnew System::Collections::Generic::List<Control^>();
@@ -1234,6 +1514,48 @@ namespace GameStore_Application {
 
     MyClient->add_basket(game);
     MessageBox::Show(String::Format(L"Added to cart: {0}", gcnew String(game->get_title().c_str())));
+  }
+
+  private: System::Void AddinWislist_Click(System::Object^ sender, System::EventArgs^ e) {
+    Button^ btn = safe_cast<Button^>(sender);
+
+    IntPtr ptr = (IntPtr)btn->Tag;
+    Game* game = (Game*)ptr.ToPointer();
+
+    MyClient->add_desired(game);
+    MessageBox::Show(String::Format(L"Added to wishlist: {0}", gcnew String(game->get_title().c_str())));
+  }
+
+  private: System::Void RemoveGameinWish(System::Object^ sender, System::EventArgs^ e) {
+    Button^ btn = safe_cast<Button^>(sender);
+    IntPtr ptr = (IntPtr)btn->Tag;
+    Game* game = (Game*)ptr.ToPointer();
+
+    MyClient->remove_desired(game);
+
+    Panel^ panelToRemove = nullptr;
+    for each (Control ^ ctrl in wishlistinfoPanel->Controls) {
+      if (ctrl->Tag != nullptr && (IntPtr)ctrl->Tag == ptr) {
+        panelToRemove = safe_cast<Panel^>(ctrl);
+        break;
+      }
+    }
+
+    if (panelToRemove != nullptr) {
+      wishlistinfoPanel->Controls->Remove(panelToRemove);
+      delete panelToRemove;
+    }
+
+    int currentY = 50;
+    System::Collections::Generic::List<Control^>^ controlsToRemove = gcnew System::Collections::Generic::List<Control^>();
+    for each (Control ^ ctrl in wishlistinfoPanel->Controls) {
+      if (ctrl->Tag != nullptr) {
+        ctrl->Location = Point(10, currentY);
+        currentY += ctrl->Height + 10;
+      }
+    }
+
+    MessageBox::Show(String::Format(L"Deleted from the wishlist: {0}", gcnew String(game->get_title().c_str())));
   }
 
   private: System::Void RemoveGameinCart(System::Object^ sender, System::EventArgs^ e) {

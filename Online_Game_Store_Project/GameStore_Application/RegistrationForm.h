@@ -230,7 +230,7 @@ namespace GameStore_Application {
       this->Close();
     }
     catch (const std::exception& ex) {
-      MessageBox::Show(gcnew String(ex.what()), "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+      MessageBox::Show(gcnew String(ex.what()), "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
     }
   }
   };
